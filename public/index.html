@@ -3,31 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dreams | Plataforma de Crecimiento PyME</title>
+    <title>Dreams | Crecimiento PyME</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="public/assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <div id="app">
         <header class="navbar">
-            <div class="logo">DREAMS</div>
-            <nav id="main-nav"></nav>
-            <div id="auth-status"></div>
+            <h1 class="logo">DREAMS</h1>
         </header>
 
-        <main id="view-container">
-            <section id="login-section" class="auth-card">
-                <h2>Bienvenido</h2>
-                <p>Ingresa para acceder a tus recursos.</p>
+        <main class="container">
+            <div id="auth-card" class="card">
+                <h2>Iniciar Sesión</h2>
                 <form id="login-form">
                     <input type="email" id="email" placeholder="Correo electrónico" required>
                     <input type="password" id="password" placeholder="Contraseña" required>
-                    <button type="submit" class="btn-primary">Iniciar Sesión</button>
+                    <button type="submit" class="btn-primary">Entrar</button>
                 </form>
-            </section>
+            </div>
         </main>
     </div>
-
     <script type="module" src="src/app.js"></script>
 </body>
 </html>
