@@ -1,0 +1,583 @@
+/* ========================================================================== */
+/* DREAMS ACADEMIA | ESTILOS INSTITUCIONALES "MI EMPRESA CRECE" */
+/* ========================================================================== */
+
+:root {
+    /* --- RECUPERACIÓN DE PALETA ORIGINAL --- */
+    --primary-color: #005A9C;   /* Azul Vibrante Original */
+    --accent-color: #FF6F61;    /* Coral/Naranja de Acento Original */
+    --secondary-color: #009B77; /* Verde Original */
+    --text-color: #343A40;
+    --heading-color: #212529;
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #E0F7FA 0%, #80DEEA 50%, #005A9C 100%);
+    background-attachment: fixed; /* Mantiene el degradado suave al hacer scroll */
+    color: var(--text-color);
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* --- AJUSTE GLOBAL DE REVEAL PARA ACADEMIA --- */
+.reveal {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 24px; 
+    color: var(--text-color);
+}
+
+.reveal h1, .reveal h2, .reveal h3 {
+    font-family: 'Montserrat', sans-serif !important;
+    color: var(--primary-color) !important;
+    font-weight: 600 !important;
+    text-transform: none !important; /* Evita que Reveal force mayúsculas */
+}
+
+.reveal p, .reveal li {
+    line-height: 1.4;
+    font-weight: 400;
+}
+
+/* --- ESTRUCTURA DE CONTENEDOR DE DIAPOSITIVA (Rescatado) --- */
+.reveal .slides section {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important; /* Alinea el contenido arriba */
+    height: 100% !important;
+    padding: 40px 60px !important; /* Espaciado interno original */
+    box-sizing: border-box !important;
+    text-align: center;
+}
+
+/* Asegura que los títulos tengan margen inferior consistente */
+.reveal .slides section h2 {
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+/* Contenedor Principal */
+#app {
+    width: 100%;
+    margin: 0;
+    display: block; /* Restablece el flujo vertical para las pantallas internas */
+}
+
+/* --- HEADER / NAVBAR (Normalizado) --- */
+.navbar {
+    padding: 15px 30px;
+    background: var(--card-bg);
+    border-bottom: 3px solid var(--secondary-color); /* Acento Verde Original */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo {
+    margin: 0;
+    font-weight: 700;
+    color: var(--primary-color); /* Azul Original */
+    letter-spacing: -0.5px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: var(--primary-color);
+}
+
+/* --- BOTONES Y COMPONENTES (Normalizados) --- */
+/* --- ESTILIZACIÓN QUIRÚRGICA DEL BOTÓN DE ACCIÓN --- */
+.btn-primary {
+    background-color: var(--secondary-color); /* Verde Institucional */
+    color: #ffffff;
+    border: none;
+    padding: 16px 24px; /* Más aire vertical */
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.5px; /* Estética de marca premium */
+    text-transform: none; 
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    width: 100%;
+    box-shadow: 0 10px 20px rgba(0, 155, 119, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary:hover:not([disabled]) {
+    background-color: #008767; /* Un verde ligeramente más profundo para el hover */
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 155, 119, 0.25);
+}
+
+.btn-primary:active:not([disabled]) {
+    transform: translateY(0); /* Efecto de pulsación al hacer clic */
+    box-shadow: 0 5px 10px rgba(0, 155, 119, 0.2);
+}
+
+.btn-primary[disabled] {
+    background-color: #e2e8f0;
+    color: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+
+/* --- ESTRUCTURA DE LOGIN DIVIDIDO (MODERNO) --- */
+.login-split-wrapper {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr; 
+    max-width: 950px;       /* Reducción de ancho para hacerlo más compacto */
+    min-height: 60vh;       /* Altura más equilibrada y menos invasiva */
+    background: #ffffff;
+    border-radius: 24px;
+    overflow: hidden;
+    margin: 10vh auto;      /* Centrado horizontal (auto) y respiro superior (10vh) */
+    box-shadow: 0 40px 100px rgba(0, 90, 156, 0.18); /* Sombra más profunda y difuminada */
+}
+
+/* Lado de Marca (Azul Institucional) */
+.login-brand-side {
+    background-color: var(--primary-color);
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column; /* Apila el logo y el texto verticalmente */
+    align-items: center;    /* Centra los elementos horizontalmente */
+    justify-content: center; /* Centra el contenido verticalmente en la columna */
+    color: #ffffff;
+    text-align: center;      /* Centra el texto de bienvenida */
+}
+
+.login-hero-logo {
+    max-height: 180px; /* Incremento de tamaño para mayor impacto visual */
+    width: auto;
+    margin: 0 auto 40px auto; /* Centrado horizontal explícito y margen inferior */
+    display: block;
+    filter: brightness(0) invert(1); 
+}
+
+.brand-content h1 {
+    color: #ffffff !important;
+    font-size: 2.4rem !important;
+    margin-bottom: 20px !important;
+}
+
+.brand-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.85;
+    font-weight: 300;
+}
+
+/* Lado del Formulario (Blanco Minimalista) */
+.login-form-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    background-color: #ffffff;
+}
+
+#auth-card {
+    width: 100%;
+    max-width: 360px;
+    border: none;
+    box-shadow: none; /* La sombra ahora la tiene el wrapper principal */
+}
+
+#auth-card h2 {
+    font-weight: 300;
+    font-size: 1.8rem;
+    margin-bottom: 2.5rem;
+    color: var(--primary-color);
+}
+
+/* Ajuste Responsivo para Móviles */
+@media (max-width: 900px) {
+    .login-split-wrapper {
+        grid-template-columns: 1fr;
+        margin: 20px;
+    }
+    .login-brand-side {
+        display: none; /* En móviles ocultamos la marca para priorizar el acceso */
+    }
+}
+
+/* --- BOTÓN SECUNDARIO (Modalidad Live) --- */
+#btn-open-live {
+    background: var(--card-bg);
+    color: var(--secondary-color); /* Verde Original */
+    border: 2px solid var(--secondary-color);
+}
+
+#btn-open-live:hover {
+    background: var(--secondary-color);
+    color: #ffffff;
+}
+
+/* --- FORMULARIOS (Inputs y Textareas) --- */
+/* --- ESTILIZACIÓN QUIRÚRGICA DE CAMPOS (MINIMALISTA) --- */
+input, textarea {
+    width: 100%;
+    padding: 14px 18px;
+    margin: 8px 0 24px 0;
+    border: 1.5px solid #e2e8f0; /* Borde más fino y tono gris azulado moderno */
+    border-radius: 10px; /* Esquinas ligeramente más redondeadas */
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    background-color: #fcfcfd; /* Fondo casi imperceptible para dar profundidad */
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input::placeholder {
+    color: #a0aec0; /* Gris suave para el texto de sugerencia */
+    font-weight: 300;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    background-color: #ffffff; /* Al escribir, el campo se vuelve blanco puro */
+    border-color: var(--primary-color); /* Azul Vibrante Dreams */
+    box-shadow: 0 0 0 4px rgba(0, 90, 156, 0.08); /* Aura de enfoque más sutil */
+    transform: translateY(-1px); /* Efecto sutil de levante */
+}
+
+/* ========================================================================== */
+/* ESTILOS DEL REPRODUCTOR DE PODCAST (CON TRANSICIONES SUAVES) */
+/* ========================================================================== */
+
+#podcast-player {
+    background: var(--card-bg) !important;
+    border: 1px solid #eee !important;
+    box-shadow: 0 -5px 25px rgba(0,0,0,0.1) !important;
+    border-top: 4px solid var(--secondary-color) !important;
+    /* Transición para apertura suave */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    transform-origin: bottom right;
+}
+
+#podcast-name {
+    color: var(--primary-color) !important;
+    letter-spacing: 0.5px;
+    font-size: 0.7rem;
+}
+
+#btn-close-podcast {
+    color: #999 !important;
+    transition: color 0.3s ease;
+}
+
+#btn-close-podcast:hover {
+    color: var(--accent-color) !important;
+}
+
+/* --- ESTILOS PARA LA BURBUJA DE RECUPERACIÓN (FAB) --- */
+#btn-show-podcast {
+    background: var(--secondary-color) !important;
+    border: none;
+    /* Transición para rebote sutil */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+#btn-show-podcast:hover {
+    transform: scale(1.1) rotate(5deg);
+    background: var(--primary-color) !important;
+}
+
+/* --- CLASE DE CONTROL DE VISIBILIDAD (EL "ALMA" DE LA ANIMACIÓN) --- */
+.podcast-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateY(30px) scale(0.5) !important;
+}
+
+/* Personalización del Audio Nativo (Básico) */
+audio {
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+}
+
+audio::-webkit-media-controls-panel {
+    background-color: #f8f9fa;
+}
+
+audio::-webkit-media-controls-play-button {
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+}
+
+/* ========================================================================== */
+/* INTEGRACIÓN Y CORRECCIÓN DE REVEAL.JS (SIN ENCIMADO) */
+/* ========================================================================== */
+
+/* Contenedor de la Presentación (Rescate de Estilo Original: Fondo Claro) */
+.presentation-wrapper {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    min-height: 500px;
+    background: #fff; /* Regresamos al blanco para resaltar la paleta azul/coral */
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+}
+
+/* Estilos base para Reveal (Legibilidad de Texto) */
+#view-presentation .reveal {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color); /* Texto oscuro para contraste */
+}
+
+/* Títulos de Diapositivas (Azul Institucional Recuperado) */
+#view-presentation .reveal h2 {
+    color: var(--primary-color) !important; 
+    font-weight: 700;
+    text-transform: none;
+    margin-bottom: 20px;
+}
+
+/* Subtítulos y texto general (Jerarquía de Color) */
+#view-presentation .reveal p,
+#view-presentation .reveal li {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+/* Imágenes en Diapositivas - CORREGIDO */
+#view-presentation .slide-image {
+    max-width: 90%;
+    max-height: 450px; /* Altura máxima para evitar desbordes */
+    object-fit: contain; /* Asegura que la imagen se vea completa */
+    margin: 30px auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Botón dentro de la presentación (Link al Workbook) */
+#view-presentation .reveal .btn-primary {
+    display: inline-block;
+    width: auto;
+    margin-top: 30px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    background-color: var(--mec-green);
+    color: var(--mec-white);
+    box-shadow: 0 5px 15px rgba(46, 125, 50, 0.4); /* Sombra verde */
+}
+
+#view-presentation .reveal .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.6);
+}
+
+/* Estilos Específicos de la Sesión A (Rescatados) */
+
+/* --- RECUPERACIÓN DE LAYOUTS DE DOBLE COLUMNA --- */
+#view-presentation .content-wrapper,
+#view-presentation .layout-two-columns .content-wrapper {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr; /* Prioridad ligera al texto */
+    gap: 50px;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+}
+
+/* Control de imágenes dentro de columnas para evitar desbordes */
+#view-presentation .content-wrapper img {
+    max-width: 100%;
+    max-height: 380px; 
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Adaptación para pantallas pequeñas (Responsivo) */
+@media (max-width: 768px) {
+    #view-presentation .content-wrapper {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+/* --- RESCATE DE VIÑETAS PERSONALIZADAS (Lámina 6) --- */
+#view-presentation .lista-objetivos {
+    list-style-type: none !important;
+    padding-left: 0;
+    text-align: left;
+    margin-top: 40px !important; /* Espacio entre el texto y la lista */
+    font-size: 1.1em; /* Texto ligeramente más grande para legibilidad */
+}
+
+#view-presentation .lista-objetivos li {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start; /* Alinea el icono con la primera línea de texto */
+}
+
+#view-presentation .lista-objetivos li::before {
+    content: '';
+    display: inline-block;
+    background-image: url('/src/academia/courses/consolida-360/sesion-a/presentation/images/slide-6.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    
+    /* Dimensiones originales recuperadas */
+    width: 28px;
+    height: 28px;
+    margin-right: 20px;
+    margin-top: 5px; /* Ajuste fino para centrar con el texto */
+    flex-shrink: 0;
+}
+
+/* --- RESCATE DE CITA DESTACADA (Legacy Style: Azul & Coral) --- */
+#view-presentation .highlight-quote {
+    background: rgba(0, 90, 156, 0.05); /* Fondo Azul primario casi imperceptible */
+    padding: 35px 45px;
+    border-left: 8px solid var(--accent-color); /* Borde grueso en Coral vibrante */
+    border-radius: 0 15px 15px 0; /* Bordes redondeados solo a la derecha */
+    margin-top: 50px;
+    font-style: italic;
+    box-shadow: 2px 2px 15px rgba(0, 90, 156, 0.05);
+}
+
+#view-presentation .highlight-quote p {
+    color: var(--primary-color) !important; /* Texto en Azul institucional */
+    margin: 0 !important;
+    font-size: 1.2rem !important;
+    line-height: 1.6 !important;
+}
+
+#view-presentation .highlight-quote strong {
+    color: var(--accent-color) !important; /* Palabras clave en Coral */
+    font-weight: 700;
+}
+
+/* --- REFINAMIENTO DE TARJETAS (CARDS) DE LA ACADEMIA --- */
+.card-content {
+    flex-grow: 1; /* Empuja los botones hacia abajo para mantener simetría */
+}
+
+.card h3 {
+    margin: 10px 0;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1.3rem;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+.btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* --- ESTILOS DE LA BURBUJA DE PROPÓSITO (MODALES) --- */
+.purpose-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 90, 156, 0.08);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.purpose-bubble {
+    background: white;
+    max-width: 500px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 28px;
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.purpose-overlay.active { display: flex; }
+.purpose-overlay.active .purpose-bubble {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.close-bubble {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: #f5f5f5;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.close-bubble:hover { background: #fee2e2; color: #ef4444; }
+
+/* BOTÓN DE REVELACIÓN (CAT PODEROSO) */
+.btn-reveal-purpose {
+    background: none;
+    border: 1.5px solid var(--secondary-color);
+    color: var(--secondary-color);
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s;
+    width: fit-content;
+}
+
+.btn-reveal-purpose:hover {
+    background: var(--secondary-color);
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 155, 119, 0.2);
+}
