@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academia | Dreams</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -18,6 +18,10 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        // Establecemos Montserrat como la fuente base de Tailwind
+                        'sans': ['Montserrat', 'ui-sans-serif', 'system-ui'],
+                    },
                     colors: {
                         'brand-blue': '#00529B',
                         'brand-orange': '#F68D2E',
@@ -29,22 +33,34 @@
 </head>
 <body>
     <div id="app">
-        <header class="navbar" style="padding: 10px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-            <div class="logo-container">
-                <img src="assets/images/logo.png" alt="Mi Empresa Crece" style="max-height: 50px; width: auto; display: block;">
-            </div>
-            <a href="dashboard.html" style="text-decoration: none; color: #666; font-size: 0.8rem; font-weight: 600;">← VOLVER AL PANEL</a>
-        </header>
+        <header class="navbar">
+    <div class="nav-left" style="width: 180px;">
+        <a href="dashboard.html" class="btn-nav-back" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: var(--primary-midnight); font-weight: 600; font-size: 0.85rem; transition: all 0.3s ease;">
+            <span style="font-size: 1.2rem;">←</span> 
+            <span style="text-transform: uppercase; letter-spacing: 0.05em;">Volver al Panel</span>
+        </a>
+    </div>
 
-       <main class="container" style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+    <div class="logo-container">
+        <img src="assets/images/logo.png" alt="Dreams Logo" class="logo-header">
+    </div>
+
+    <div class="contact-container" style="width: 180px; display: flex; justify-content: flex-end;">
+        <button id="btn-open-contact" title="Enviar mensaje a soporte" style="background: var(--primary-midnight); color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; border: 1px solid var(--accent-gold); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(15, 52, 96, 0.15);">
+            ✉️
+        </button>
+    </div>
+</header>
+
+       <main class="container" style="max-width: 1400px; margin: 40px auto; padding: 0 20px;">
             
             <div id="view-lobby">
                 <header class="section-header" style="margin-bottom: 50px; text-align: center;">
-                    <h2 style="font-weight: 600; letter-spacing: -1.5px; color: var(--primary-color); font-size: 2.2rem;">Tu Ruta de Crecimiento</h2>
-                    <p style="color: #555; font-size: 1.05rem; font-weight: 300; max-width: 600px; margin: 15px auto 0;">Selecciona un módulo para continuar con tu transformación empresarial basada en los principios de resiliencia y propósito trascendente.</p>
+                    <h1 style="font-weight: 700; color: var(--primary-color); font-size: 1.875rem; letter-spacing: -0.025em;">Tu Ruta de Crecimiento</h1>
+<p style="color: #4A5568; font-size: 1.125rem; font-weight: 400; max-width: 700px; margin: 12px auto 0; line-height: 1.5;">Selecciona un módulo para continuar con tu transformación empresarial basada en los principios de resiliencia y propósito trascendente.</p>
                 </header>
 
-                <div id="course-lobby" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <div id="course-lobby" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; justify-content: center;">
                     <article class="card">
                         <div class="card-content">
                             <span style="color: var(--secondary-color); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;">Programa Autogestivo</span>
@@ -143,7 +159,7 @@
                     <span id="status-message" style="font-size: 0.75rem; color: #999;"></span>
                 </div>
                 
-                <iframe id="workbook-iframe" src="" style="width: 100%; height: 100%; border: none; border-radius: 16px; shadow: 0 10px 30px rgba(0,0,0,0.1);"></iframe>
+                <iframe id="workbook-iframe" src="" style="width: 100%; height: 100%; border: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);"></iframe>
             </div>
         </main>
 
@@ -164,15 +180,19 @@
         <div id="purpose-overlay-online" class="purpose-overlay">
             <div class="purpose-bubble">
                 <button class="close-bubble" id="btn-close-purpose-online">&times;</button>
-                <h3 style="color: var(--primary-color); margin-top: 0;">Tu Ruta Autogestiva</h3>
-                <p>Establecer las bases teóricas y el autodiagnóstico inicial para blindar tu operación con autonomía.</p>
+                <h3 style="color: var(--primary-color); margin-top: 0; line-height: 1.2;">De Dueño Agotado a Líder de una Empresa Próspera y Autónoma</h3>
+                <p style="margin-top: 15px;">Deja de ser el cuello de botella de tu propio crecimiento. En 30 días, transforma tu PYME en una organización responsable, rentable y con propósito. Implementamos sistemas de autonomía, ecosistemas digitales de venta y marcos financieros de alta precisión.</p>
+                <p style="margin-top: 10px;"><strong>Beneficios:</strong> Libertad Real (equipo autónomo), Crecimiento Predecible y Seguridad Financiera (Filtro 4+1).</p>
+                <p style="margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px; font-style: italic;"><strong>Nuestra Garantía:</strong> Generamos valor organizacional o te regresamos tu dinero.</p>
             </div>
         </div>
         <div id="purpose-overlay-live" class="purpose-overlay">
             <div class="purpose-bubble">
                 <button class="close-bubble" id="btn-close-purpose-live">&times;</button>
-                <h3 style="color: var(--primary-color); margin-top: 0;">Mentoría Estratégica</h3>
-                <p>Acelerar resultados mediante el feedback experto y la resolución de dudas críticas en tiempo real.</p>
+                <h3 style="color: var(--primary-color); margin-top: 0; line-height: 1.2;">Consolida 360° LIVE: De Dueño Agotado a Líder de una Empresa Próspera y Autónoma</h3>
+                <p style="margin-top: 15px;">Rompe la dependencia operativa del líder mediante interacción directa y feedback inmediato del facilitador. En 4 semanas, implementamos sistemas de autonomía, ecosistemas digitales de venta y marcos financieros de alta precisión.</p>
+                <p style="margin-top: 10px;"><strong>Formato de Alto Impacto:</strong> Sesiones síncronas de 120 minutos + Implementación Real + Consultoría 1 a 1 personalizada para resolver tus retos específicos.</p>
+                <p style="margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; font-style: italic;"><strong>Nuestra Garantía:</strong> Generamos valor organizacional o te regresamos tu dinero. El riesgo es nuestro; el crecimiento es tuyo.</p>
             </div>
         </div>
     </div>
@@ -184,5 +204,27 @@
     <script type="module" src="src/app.js"></script>
 
     <script type="module" src="src/academia/academia.js"></script>
+
+    <div id="contact-overlay" class="purpose-overlay">
+        <div class="purpose-bubble" style="max-width: 500px;">
+            <button class="close-bubble" id="btn-close-contact">&times;</button>
+            
+            <header style="margin-bottom: 25px;">
+                <h2 style="color: var(--primary-midnight); font-weight: 700; font-size: 1.5rem; margin-bottom: 8px;">Conecta con tu Crecimiento</h2>
+                <p style="font-weight: 300; font-size: 0.9rem; color: #666; line-height: 1.4;">¿Deseas escalar tu PyME o tienes alguna duda sobre nuestros programas? Estamos para servirte.</p>
+            </header>
+
+            <form id="contact-form" style="display: flex; flex-direction: column; gap: 5px;">
+                <div class="form-group">
+                    <input type="text" id="contact-name" placeholder="Nombre completo" required style="margin-bottom: 15px;">
+                </div>
+                <button type="submit" class="btn-primary" id="btn-send-contact">
+                    Enviar Mensaje
+                </button>
+                <p id="contact-status" style="font-size: 0.7rem; text-align: center; margin-top: 10px; color: var(--primary-midnight);"></p>
+            </form>
+        </div>
+    </div>
+
 </body>
 </html>
