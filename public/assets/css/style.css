@@ -3,23 +3,37 @@
 /* ========================================================================== */
 
 :root {
-    /* --- RECUPERACIÓN DE PALETA ORIGINAL --- */
-    --primary-color: #005A9C;   /* Azul Vibrante Original */
-    --accent-color: #FF6F61;    /* Coral/Naranja de Acento Original */
-    --secondary-color: #009B77; /* Verde Original */
-    --text-color: #343A40;
-    --heading-color: #212529;
-    --bg-color: #f8f9fa;
-    --card-bg: #ffffff;
+    /* --- DESIGN TOKENS: PRESTIGE (QUIET LUXURY) --- */
+    --bg-base: #F5F5F0;           /* Marfil de Lino [cite: 6] */
+    --primary-midnight: #0F3460;  /* Azul Medianoche [cite: 7] */
+    --accent-terracotta: #E2725B; /* Terracota Suave [cite: 8] */
+    --accent-gold: #957C3D;       /* Oro Bronceado [cite: 9] */
+    
+    /* Mapeo de Transición para mantener compatibilidad */
+    --primary-color: var(--primary-midnight);
+    --accent-color: var(--accent-terracotta);
+    --secondary-color: var(--primary-midnight);
+    --text-color: #1A1A1A;        /* Negro Carbono para precisión [cite: 68] */
+    --heading-color: var(--primary-midnight);
+    --bg-color: var(--bg-base);
+    --card-bg: #FFFFFF;
+}
+
+/* Forzamos Montserrat en todos los elementos interactivos y definimos escala base */
+body, button, input, textarea, select {
+    font-family: 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #E0F7FA 0%, #80DEEA 50%, #005A9C 100%);
-    background-attachment: fixed; /* Mantiene el degradado suave al hacer scroll */
+    font-size: 16px;
+    background-color: var(--bg-base); /* Transición al Marfil de Lino */
     color: var(--text-color);
     margin: 0;
     min-height: 100vh;
+    line-height: 1.6;
+    font-weight: 400; /* Peso base para estabilidad en la interfaz */
 }
 
 /* --- AJUSTE GLOBAL DE REVEAL PARA ACADEMIA --- */
@@ -29,27 +43,50 @@ body {
     color: var(--text-color);
 }
 
-.reveal h1, .reveal h2, .reveal h3 {
+/* --- JERARQUÍA TIPOGRÁFICA EDITORIAL (PRESTIGE) --- */
+h1, h2, h3, .reveal h1, .reveal h2, .reveal h3 {
     font-family: 'Montserrat', sans-serif !important;
-    color: var(--primary-color) !important;
+    text-transform: none !important;
+    color: var(--primary-midnight) !important;
+}
+
+h1, h2, .reveal h1, .reveal h2 {
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important; /* Rigor editorial: Tracking ajustado */
+    line-height: 1.2;
+}
+
+h3, .reveal h3 {
     font-weight: 600 !important;
-    text-transform: none !important; /* Evita que Reveal force mayúsculas */
+    letter-spacing: -0.01em !important;
 }
 
-.reveal p, .reveal li {
-    line-height: 1.4;
-    font-weight: 400;
+p, li, .reveal p, .reveal li {
+    font-weight: 300; /* Peso ligero para una estética sofisticada */
+    line-height: 1.7 !important; /* Incremento sutil de aire vertical */
+    margin-bottom: 1.5rem;
 }
 
-/* --- ESTRUCTURA DE CONTENEDOR DE DIAPOSITIVA (Rescatado) --- */
+/* Blindaje de legibilidad para énfasis y cálculos */
+strong, b, .calculation-label {
+    font-weight: 600 !important;
+    color: var(--primary-midnight);
+}
+
+/* --- ESTRUCTURA DE CONTENEDOR DE DIAPOSITIVA (Normalizado para Reveal) --- */
 .reveal .slides section {
+    /* Eliminamos display:flex y height:100% para que Reveal controle la visibilidad y el escalado */
+    padding: 40px 60px; 
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Aplicamos el diseño flexible solo a la diapositiva que se está mostrando actualmente */
+.reveal .slides section.present {
     display: flex !important;
     flex-direction: column !important;
-    justify-content: flex-start !important; /* Alinea el contenido arriba */
+    justify-content: center !important; 
     height: 100% !important;
-    padding: 40px 60px !important; /* Espaciado interno original */
-    box-sizing: border-box !important;
-    text-align: center;
 }
 
 /* Asegura que los títulos tengan margen inferior consistente */
@@ -67,20 +104,40 @@ body {
 
 /* --- HEADER / NAVBAR (Normalizado) --- */
 .navbar {
-    padding: 15px 30px;
-    background: var(--card-bg);
-    border-bottom: 3px solid var(--secondary-color); /* Acento Verde Original */
+    padding: 12px 40px;
+    background: rgba(255, 255, 255, 0.85); /* Transparencia sofisticada */
+    backdrop-filter: blur(12px);          /* Efecto de cristal esmerilado */
+    border-bottom: 1px solid rgba(15, 52, 96, 0.08); /* Línea capilar casi invisible */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    /* Soft Depth: Sombra multicapa orgánica */
+    box-shadow: 
+        0 1px 2px rgba(0,0,0,0.02),
+        0 4px 12px rgba(15, 52, 96, 0.06); 
 }
 
-.logo {
-    margin: 0;
-    font-weight: 700;
-    color: var(--primary-color); /* Azul Original */
-    letter-spacing: -0.5px;
+/* --- ESTILIZACIÓN DEL LOGO INSTITUCIONAL (IMPACTO PREMIUM) --- */
+.logo-header {
+    height: 70px; /* Altura optimizada para presencia visual sin desbordar el header */
+    width: auto;
+    object-fit: contain; /* Ignora bordes transparentes excesivos del archivo de imagen */
+    display: block;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.logo-header:hover {
+    transform: scale(1.03); /* Micro-interacción sutil y elegante */
+}
+
+/* Contenedor flexible que garantiza el centrado y respiro del logo */
+.logo-container {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
 }
 
 .navbar a {
@@ -98,33 +155,36 @@ body {
 
 /* --- BOTONES Y COMPONENTES (Normalizados) --- */
 /* --- ESTILIZACIÓN QUIRÚRGICA DEL BOTÓN DE ACCIÓN --- */
+/* --- BOTÓN PRIMARIO: PRESTIGE (AZUL & ORO) --- */
 .btn-primary {
-    background-color: var(--secondary-color); /* Verde Institucional */
-    color: #ffffff;
-    border: none;
-    padding: 16px 24px; /* Más aire vertical */
-    border-radius: 10px;
+    background-color: var(--primary-midnight); /* [cite: 7, 64] */
+    color: #FFFFFF;
+    border: 1px solid var(--accent-gold); /* [cite: 73] Micro-destello en Oro */
+    padding: 18px 32px;
+    border-radius: 12px;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 1rem;
-    letter-spacing: 0.5px; /* Estética de marca premium */
-    text-transform: none; 
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    font-family: 'Montserrat', sans-serif !important; /* [cite: 465] */
+    font-weight: 600; /* [cite: 85] */
+    font-size: 1rem; /* [cite: 85, 471] */
+    letter-spacing: 0.05em; /* [cite: 85] */
+    text-transform: uppercase; /* [cite: 85] */
+    transition: all 300ms ease-out; /* [cite: 26, 123] */
     width: 100%;
-    box-shadow: 0 10px 20px rgba(0, 155, 119, 0.15);
+    /* Soft Depth Shadow teñida de Midnight */
+    box-shadow: 0 4px 6px rgba(15, 52, 96, 0.08), 0 1px 3px rgba(15, 52, 96, 0.04); /* [cite: 102] */
     position: relative;
     overflow: hidden;
 }
 
 .btn-primary:hover:not([disabled]) {
-    background-color: #008767; /* Un verde ligeramente más profundo para el hover */
+    background-color: #164275; /* Variante sutil del azul para profundidad */
     transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(0, 155, 119, 0.25);
+    box-shadow: 0 10px 15px -3px rgba(15, 52, 96, 0.12); /* [cite: 103] */
 }
 
 .btn-primary:active:not([disabled]) {
-    transform: translateY(0); /* Efecto de pulsación al hacer clic */
-    box-shadow: 0 5px 10px rgba(0, 155, 119, 0.2);
+    transform: scale(0.98); /* [cite: 32, 125] Micro-escala de calidad */
+    box-shadow: 0 2px 4px rgba(15, 52, 96, 0.1);
 }
 
 .btn-primary[disabled] {
@@ -137,79 +197,111 @@ body {
 
 .card {
     background: var(--card-bg);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-    border: 1px solid #eee;
+    padding: 1.75rem; /* Reducción quirúrgica para un look más compacto y ágil */
+    border-radius: 16px; /* Ajuste proporcional a la nueva escala bento */
+    border: 1px solid rgba(15, 52, 96, 0.04);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    /* Mantenemos la profundidad suave (Soft Depth) del Lujo Silencioso */
+    box-shadow: 
+        0 4px 6px rgba(15, 52, 96, 0.02),
+        0 15px 35px rgba(15, 52, 96, 0.05);
 }
 
-/* --- ESTRUCTURA DE LOGIN DIVIDIDO (MODERNO) --- */
+.card:hover {
+    transform: translateY(-8px); /* Elevación sutil al interactuar */
+    box-shadow: 
+        0 12px 20px rgba(15, 52, 96, 0.05),
+        0 30px 60px rgba(15, 52, 96, 0.08);
+}
+
+/* --- REPARACIÓN DE PORTAL: PRESTIGE LOGIN --- */
 .login-split-wrapper {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr; 
-    max-width: 950px;       /* Reducción de ancho para hacerlo más compacto */
-    min-height: 60vh;       /* Altura más equilibrada y menos invasiva */
-    background: #ffffff;
-    border-radius: 24px;
+    grid-template-columns: 1fr 1fr; /* Proporción 50/50 para estabilidad */
+    max-width: 900px;
+    width: 95%; /* Asegura visibilidad en pantallas medianas */
+    min-height: 500px;
+    background: var(--card-bg);
+    border-radius: 32px;
     overflow: hidden;
-    margin: 10vh auto;      /* Centrado horizontal (auto) y respiro superior (10vh) */
-    box-shadow: 0 40px 100px rgba(0, 90, 156, 0.18); /* Sombra más profunda y difuminada */
+    margin: 8vh auto;
+    border: 1px solid rgba(15, 52, 96, 0.05);
+    box-shadow: 0 40px 100px rgba(15, 52, 96, 0.12);
 }
 
-/* Lado de Marca (Azul Institucional) */
 .login-brand-side {
-    background-color: var(--primary-color);
-    padding: 80px 60px;
+    background-color: var(--primary-midnight);
+    padding: 40px;
     display: flex;
-    flex-direction: column; /* Apila el logo y el texto verticalmente */
-    align-items: center;    /* Centra los elementos horizontalmente */
-    justify-content: center; /* Centra el contenido verticalmente en la columna */
+    align-items: center;
+    justify-content: center;
     color: #ffffff;
-    text-align: center;      /* Centra el texto de bienvenida */
 }
 
-.login-hero-logo {
-    max-height: 180px; /* Incremento de tamaño para mayor impacto visual */
-    width: auto;
-    margin: 0 auto 40px auto; /* Centrado horizontal explícito y margen inferior */
-    display: block;
-    filter: brightness(0) invert(1); 
+.brand-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    gap: 20px; /* Alineación perfecta de Logo, H1 y P [cite: 161] */
 }
 
 .brand-content h1 {
-    color: #ffffff !important;
-    font-size: 2.4rem !important;
-    margin-bottom: 20px !important;
+    margin: 0; /* Elimina la brecha vertical asimétrica [cite: 84] */
+    line-height: 1.2;
+}
+
+.login-brand-side p {
+    margin: 0; /* Elimina desplazamientos por herencia */
+    max-width: 280px; /* Estrecha el texto para mejorar el 'justificado' visual  */
+}
+
+/* RESTRICCIÓN CRÍTICA DEL LOGO */
+.login-hero-logo {
+    max-width: 180px;
+    height: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+    /* Desplazamiento independiente del flujo Flexbox */
+    transform: translateY(50px);
 }
 
 .brand-content p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    opacity: 0.85;
+    margin: 0 auto;
+    max-width: 300px;
     font-weight: 300;
+    line-height: 1.6;
+    opacity: 0.9;
+    text-wrap: balance;
+    /* Elevación quirúrgica para compactar el bloque de marca */
+    transform: translateY(-40px);
 }
 
-/* Lado del Formulario (Blanco Minimalista) */
 .login-form-side {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 60px;
-    background-color: #ffffff;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
 }
 
 #auth-card {
     width: 100%;
-    max-width: 360px;
-    border: none;
-    box-shadow: none; /* La sombra ahora la tiene el wrapper principal */
+    max-width: 320px; /* Compacto para evitar desproporción */
 }
 
 #auth-card h2 {
-    font-weight: 300;
-    font-size: 1.8rem;
-    margin-bottom: 2.5rem;
-    color: var(--primary-color);
+    font-weight: 700 !important;
+    font-size: 1.6rem !important;
+    letter-spacing: -0.02em;
+    color: var(--primary-midnight);
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 /* Ajuste Responsivo para Móviles */
@@ -235,33 +327,41 @@ body {
     color: #ffffff;
 }
 
-/* --- FORMULARIOS (Inputs y Textareas) --- */
-/* --- ESTILIZACIÓN QUIRÚRGICA DE CAMPOS (MINIMALISTA) --- */
-input, textarea {
+/* --- ENTRADAS DE CRISTAL LÍQUIDO (WORKBOOK CONSOLE) --- */
+input:not([type="radio"]):not([type="checkbox"]), textarea {
     width: 100%;
-    padding: 14px 18px;
-    margin: 8px 0 24px 0;
-    border: 1.5px solid #e2e8f0; /* Borde más fino y tono gris azulado moderno */
-    border-radius: 10px; /* Esquinas ligeramente más redondeadas */
+    padding: 16px 20px;
+    margin: 10px 0 28px 0;
+    /* Efecto Liquid Glass */
+    background: rgba(255, 255, 255, 0.4) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    border: 1px solid rgba(15, 52, 96, 0.1); /* Borde Midnight sutil */
+    border-radius: 14px;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--text-color);
-    background-color: #fcfcfd; /* Fondo casi imperceptible para dar profundidad */
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    /* Sombra interna para profundidad de cristal */
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5), 0 4px 6px rgba(15, 52, 96, 0.02);
 }
 
-input::placeholder {
-    color: #a0aec0; /* Gris suave para el texto de sugerencia */
+input::placeholder, textarea::placeholder {
+    color: rgba(15, 52, 96, 0.4);
     font-weight: 300;
+    letter-spacing: 0.02em;
 }
 
 input:focus, textarea:focus {
     outline: none;
-    background-color: #ffffff; /* Al escribir, el campo se vuelve blanco puro */
-    border-color: var(--primary-color); /* Azul Vibrante Dreams */
-    box-shadow: 0 0 0 4px rgba(0, 90, 156, 0.08); /* Aura de enfoque más sutil */
-    transform: translateY(-1px); /* Efecto sutil de levante */
+    background: rgba(255, 255, 255, 0.8) !important; /* El cristal se aclara al activarse */
+    border-color: var(--accent-gold); /* Foco en Oro Bronceado */
+    transform: translateY(-2px);
+    box-shadow: 
+        0 10px 20px rgba(15, 52, 96, 0.05),
+        0 0 0 4px rgba(149, 124, 61, 0.1); /* Aura de Oro suave */
 }
 
 /* ========================================================================== */
@@ -269,12 +369,21 @@ input:focus, textarea:focus {
 /* ========================================================================== */
 
 #podcast-player {
-    background: var(--card-bg) !important;
-    border: 1px solid #eee !important;
-    box-shadow: 0 -5px 25px rgba(0,0,0,0.1) !important;
-    border-top: 4px solid var(--secondary-color) !important;
-    /* Transición para apertura suave */
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    /* Efecto Liquid Glass (Cristalización) */
+    background: rgba(255, 255, 255, 0.65) !important; 
+    backdrop-filter: blur(20px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+    
+    /* Refinamiento de Superficie Prestige */
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.8) !important; /* Reflejo de luz superior */
+    border-radius: 24px 24px 0 0 !important;
+    
+    /* Soft Depth Shadow teñida */
+    box-shadow: 0 -20px 40px rgba(15, 52, 96, 0.08) !important;
+    
+    /* Dinámica de Movimiento Fluido */
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1) !important;
     transform-origin: bottom right;
 }
 
@@ -295,15 +404,33 @@ input:focus, textarea:focus {
 
 /* --- ESTILOS PARA LA BURBUJA DE RECUPERACIÓN (FAB) --- */
 #btn-show-podcast {
-    background: var(--secondary-color) !important;
-    border: none;
-    /* Transición para rebote sutil */
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    /* Geometría y Fondo de Orbe Midnight */
+    background: radial-gradient(circle at 30% 30%, rgba(22, 66, 117, 0.9), var(--primary-midnight)) !important;
+    border: 1px solid var(--accent-gold) !important; /* Marco de Oro */
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    
+    /* Efecto Liquid Glass */
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    
+    /* Soft Depth: Sombra de Orbe */
+    box-shadow: 
+        0 8px 16px rgba(15, 52, 96, 0.2),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2) !important; /* Reflejo interno superior */
+    
+    /* Dinámica de Elevación */
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    cursor: pointer;
 }
 
 #btn-show-podcast:hover {
-    transform: scale(1.1) rotate(5deg);
-    background: var(--primary-color) !important;
+    transform: scale(1.15) rotate(12deg);
+    border-color: #FFFFFF !important; /* El borde brilla al contacto */
+    box-shadow: 
+        0 15px 30px rgba(15, 52, 96, 0.3),
+        0 0 15px rgba(149, 124, 61, 0.4) !important; /* Aura de Oro suave */
 }
 
 /* --- CLASE DE CONTROL DE VISIBILIDAD (EL "ALMA" DE LA ANIMACIÓN) --- */
@@ -384,16 +511,23 @@ audio::-webkit-media-controls-play-button {
     display: inline-block;
     width: auto;
     margin-top: 30px;
-    padding: 15px 30px;
-    font-size: 1.1rem;
-    background-color: var(--mec-green);
-    color: var(--mec-white);
-    box-shadow: 0 5px 15px rgba(46, 125, 50, 0.4); /* Sombra verde */
+    padding: 16px 32px;
+    font-size: 0.9rem;
+    background-color: var(--primary-midnight); /* Azul Medianoche */
+    color: #FFFFFF;
+    border: 1px solid var(--accent-gold); /* Detalle en Oro */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    /* Soft Depth Shadow teñida de Midnight */
+    box-shadow: 0 10px 25px rgba(15, 52, 96, 0.15);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 #view-presentation .reveal .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.6);
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(15, 52, 96, 0.25);
+    border-color: #FFFFFF;
 }
 
 /* Estilos Específicos de la Sesión A (Rescatados) */
@@ -485,17 +619,26 @@ audio::-webkit-media-controls-play-button {
 }
 
 .card h3 {
-    margin: 10px 0;
-    font-weight: 600;
+    margin: 12px 0;
+    font-weight: 700; /* Más fuerza visual */
     color: var(--primary-color);
-    font-size: 1.3rem;
+    font-size: 1.25rem; /* 20px: Estándar H3 */
+    line-height: 1.2;
 }
 
 .card p {
-    font-size: 0.95rem;
-    color: #555;
+    font-size: 1rem; /* 16px: Estándar Body para legibilidad */
+    color: #4A5568; /* Gris ligeramente más oscuro para contraste */
     line-height: 1.6;
-    font-weight: 300;
+    font-weight: 400; /* Regular: mejor para bloques de texto */
+}
+
+/* Clase para etiquetas de categoría dentro de las cards */
+.card-category {
+    font-size: 0.875rem !important; /* 14px: Estándar Label */
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .btn-group {
@@ -505,14 +648,15 @@ audio::-webkit-media-controls-play-button {
 }
 
 /* --- ESTILOS DE LA BURBUJA DE PROPÓSITO (MODALES) --- */
+/* --- CÁPSULAS DE VISIÓN (MODALES PRESTIGE) --- */
 .purpose-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 90, 156, 0.08);
-    backdrop-filter: blur(8px);
+    background: rgba(15, 52, 96, 0.2); /* Tintura Midnight para inmersión */
+    backdrop-filter: blur(15px);        /* Enfoque selectivo profundo */
     display: none;
     justify-content: center;
     align-items: center;
@@ -521,16 +665,40 @@ audio::-webkit-media-controls-play-button {
 }
 
 .purpose-bubble {
-    background: white;
-    max-width: 500px;
+    /* Efecto Liquid Glass (Cápsula Esmerilada) */
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(30px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+    
+    max-width: 550px;
     width: 100%;
-    padding: 40px;
-    border-radius: 28px;
-    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
+    padding: 50px;
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    
+    /* Soft Depth: Elevación de importancia estratégica */
+    box-shadow: 
+        0 40px 100px rgba(15, 52, 96, 0.15),
+        inset 0 0 20px rgba(255, 255, 255, 0.4);
+        
     position: relative;
-    transform: scale(0.9);
+    transform: scale(0.95) translateY(20px);
     opacity: 0;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.purpose-bubble h2 {
+    color: var(--primary-midnight) !important;
+    margin-bottom: 25px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+}
+
+.purpose-bubble p {
+    font-weight: 300 !important;
+    color: var(--text-color) !important;
+    line-height: 1.8 !important;
+    font-size: 1.1rem !important;
 }
 
 .purpose-overlay.active { display: flex; }
@@ -580,4 +748,134 @@ audio::-webkit-media-controls-play-button {
     background: var(--secondary-color);
     color: white;
     box-shadow: 0 5px 15px rgba(0, 155, 119, 0.2);
+}
+
+/* ========================================================================== */
+/* REFINAMIENTO: CÁPSULA DE CONTACTO (FASE 3) */
+/* ========================================================================== */
+
+/* Personalización del Selector de Interés */
+#contact-form select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%230F3460' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    cursor: pointer;
+}
+
+/* Ajuste fino para el área de mensaje */
+#contact-message {
+    resize: none;
+    min-height: 100px;
+}
+
+/* Estados de Envío (Visual Feedback) */
+.sending-state {
+    opacity: 0.6;
+    pointer-events: none;
+    filter: grayscale(0.5);
+}
+
+#contact-status {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: all 0.3s ease;
+    min-height: 20px;
+}
+
+/* Animación de entrada para el formulario */
+#contact-overlay.active .purpose-bubble {
+    animation: capsuleAppear 0.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes capsuleAppear {
+    from { 
+        opacity: 0; 
+        transform: scale(0.9) translateY(30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1) translateY(0); 
+    }
+}
+
+/* ========================================================================== */
+/* BURBUJA DE CONTACTO GLOBAL (FAB) - FASE 3 */
+/* ========================================================================== */
+#btn-contact-fab {
+    position: fixed;
+    bottom: 30px;
+    left: 30px; /* Ubicación opuesta al podcast para no saturar la derecha */
+    width: 60px;
+    height: 60px;
+    background: var(--primary-midnight);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 3000; /* Por encima de todo */
+    border: 1px solid var(--accent-gold);
+    box-shadow: 0 10px 25px rgba(15, 52, 96, 0.2);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#btn-contact-fab:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 15px 35px rgba(15, 52, 96, 0.3);
+    background: #164275;
+}
+
+/* Ocultar en pantallas muy pequeñas si es necesario */
+@media (max-width: 600px) {
+    #btn-contact-fab { width: 50px; height: 50px; bottom: 20px; left: 20px; }
+}
+
+/* --- MEJORAS DE NAVEGACIÓN HOMOLOGADA --- */
+.btn-nav-back:hover {
+    color: var(--accent-gold) !important;
+    transform: translateX(-4px);
+}
+
+.btn-contact-fab:hover {
+    transform: scale(1.1) rotate(5deg);
+    background: #164275 !important;
+    box-shadow: 0 6px 16px rgba(15, 52, 96, 0.25) !important;
+}
+
+/* Equilibrio simétrico para el logo centralizado */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px;
+}
+
+/* ========================================================================== */
+/* MODO CINEMA: EXPANSIÓN PARA MAXIMIZAR VIDEO Y WORKBOOK */
+/* ========================================================================== */
+
+/* Cuando el body tenga esta clase, la navbar desaparece con suavidad */
+body.cinema-mode .navbar {
+    display: none !important;
+}
+
+/* Forzamos al contenedor a ocupar todo el ancho disponible y subir al tope */
+body.cinema-mode .container {
+    max-width: 98vw !important; /* Aprovecha el 98% del ancho de la pantalla */
+    margin-top: 10px !important; /* Reduce el espacio superior */
+    padding: 0 10px !important;
+    transition: all 0.3s ease;
+}
+
+/* Ajuste de altura para que el video y workbook se vean más grandes */
+body.cinema-mode #view-presentation > div {
+    height: 92vh !important; /* Aumenta del 82vh original al 92vh */
+}
+
+body.cinema-mode #view-workbook {
+    height: 95vh !important; /* Casi toda la altura de la pantalla */
 }
