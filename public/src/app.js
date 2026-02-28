@@ -6,9 +6,53 @@ import { db, auth, doc, setDoc, getDoc } from './shared/firebase-config.js';
 // Esperamos a que la página cargue totalmente
 document.addEventListener('DOMContentLoaded', () => {
 
-    // TRACEABILIDAD: La resolución de rutas ahora es gestionada globalmente por DREAMS_CONFIG 
-    // en env-config.js para evitar deuda técnica y asegurar la integridad de los activos.
-    
+    // --- MOTOR DE IDENTIDAD VISUAL (DINÁMICO) ---
+    /**
+     * Localiza elementos de marca (logos) y les inyecta la ruta de Firebase Storage
+     * utilizando el motor central de rutas DREAMS_CONFIG.
+     */
+    /**
+     * MOTOR DE IDENTIDAD UNIFICADO: Escanea todo el DOM en busca de activos 
+     * marcados para sincronización con la nube (data-asset).
+     */
+    const initGlobalAssets = () => {
+        // TRACEABILIDAD: Usamos querySelectorAll para capturar múltiples logos
+        // presentes en Login, Dashboard y Academia simultáneamente.
+        const assets = document.querySelectorAll('[data-asset]');
+        
+        if (assets.length > 0 && window.DREAMS_CONFIG) {
+            assets.forEach(el => {
+                const assetName = el.dataset.asset;
+                
+                // NORMALIZACIÓN: Forzamos la carpeta 'Shared' (Mayúscula) para 
+                // activos de marca, garantizando compatibilidad con servidores Linux/Netlify.
+                const firebaseUrl = window.DREAMS_CONFIG.resolvePath(assetName, 'Shared');
+                
+                if (el.tagName === 'IMG') {
+                    el.src = firebaseUrl;
+                    el.onload = () => {
+                        el.classList.remove('opacity-0');
+                        el.classList.add('opacity-100');
+                    };
+                }
+
+                /**
+                 * SINCRONIZACIÓN DE MARCA DE AGUA INSTITUCIONAL:
+                 * Si el motor detecta el 'logo.png', inyecta su URL de la nube directamente
+                 * en el árbol de estilos CSS para activar el sello en las presentaciones.
+                 */
+                if (assetName === 'logo.png') {
+                    document.documentElement.style.setProperty('--dynamic-logo-url', `url("${firebaseUrl}")`);
+                }
+
+                el.onerror = () => console.error(`🚨 Error de Identidad: No se halló [${assetName}] en la ruta nube.`);
+            });
+        }
+    };
+
+    // Disparamos la carga de identidad visual de Mi Empresa Crece
+    initGlobalAssets();
+
     // Localizamos el formulario de inicio de sesión por su ID
     const loginForm = document.getElementById('login-form');
 
