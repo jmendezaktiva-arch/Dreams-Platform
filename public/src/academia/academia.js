@@ -1,45 +1,9 @@
-import { auth, db } from '../shared/firebase-config.js';
+//public/src/academia/academia.js
+import { auth, db, collection, getDocs, query, orderBy, doc, setDoc } from '../shared/firebase-config.js';
 
-// --- ESTADO GLOBAL DE SESIÓN (Fase 4: Gestión de Colisiones) ---
+// --- ESTADO GLOBAL DE SESIÓN ---
 let autosaveTimer; 
-
-// --- REGISTRO MAESTRO DE CURSOS (EL CEREBRO DEL LOBBY) ---
-// Aquí centralizamos la información para que el HTML se genere solo.
-const COURSES_CONFIG = [
-    {
-        id: 'online',
-        title: 'Consolida 360º - Online',
-        category: 'Programa Autogestivo',
-        description: 'Tu transformación empresarial, bajo tus propios términos. Consolida 360° Online es el acelerador asíncrono diseñado para dueños que buscan dominar equipos autónomos, ventas digitales y finanzas de precisión con acceso 24/7. Domina el método mediante video-lecciones, podcasts de casos reales y workbooks interactivos. La misma potencia de nuestra mentoría, adaptada a tu agenda y ritmo.',
-        purposeTitle: 'Ruta Autogestiva: Libertad Estratégica a tu propio ritmo',
-        purposeDesc: 'Acelera la evolución de tu PyME sin depender de horarios fijos. Esta modalidad te ofrece acceso total e inmediato a la metodología de Mi Empresa Crece. Incluye: diagnóstico profundo de tu operación, herramientas de implementación digital y el marco financiero Filtro 4+1. Ideal para líderes que requieren flexibilidad absoluta para blindar su empresa mientras mantienen el control de su tiempo.',
-        modality: 'ONLINE',
-        jsonPath: '/src/academia/courses/consolida-360/sesion-a/presentation/data.json',
-        buttonText: 'Iniciar Programa Online',
-        accentColor: 'var(--secondary-color)',
-        isComingSoon: false
-    },
-    {
-        id: 'live',
-        title: 'Consolida 360º - Mentoría',
-        category: 'Sesión en Vivo',
-        description: 'Aceleración estratégica con acompañamiento experto en tiempo real. Consolida 360° Mentoría rompe la dependencia operativa del líder mediante feedback inmediato y sesiones síncronas de alto impacto. Transforma tu PyME en una estructura profesional, escalable y autónoma, asegurando la implementación efectiva de los pilares de crecimiento.',
-        purposeTitle: 'Consolida 360° LIVE: De Dueño Agotado a Líder de una Empresa Próspera y Autónoma',
-        purposeDesc: 'Deja de ser el cuello de botella de tu propio crecimiento. En 30 días, transforma tu PYME en una organización responsable, rentable y con propósito mediante interacción directa y feedback inmediato. Implementamos sistemas de autonomía, ecosistemas digitales de venta y marcos financieros de alta precisión. Beneficios: Libertad Real, Crecimiento Predecible y Seguridad Financiera. Nuestra Garantía: Generamos valor organizacional o te regresamos tu dinero.',
-        modality: 'LIVE',
-        jsonPath: '/src/academia/courses/consolida-360/sesion-a/presentation/data.json',
-        buttonText: 'Entrar al Cuaderno Live',
-        accentColor: 'var(--primary-color)',
-        isComingSoon: false
-    },
-    {
-        id: 'tiempo',
-        title: 'Optimizando mi tiempo',
-        category: 'Programa',
-        description: 'Próximamente: Dominio de la gestión de la agenda con un método único y comprobado para hacer tu día más productivo',
-        isComingSoon: true
-    }
-];
+let COURSES_CONFIG = []; // Se poblará dinámicamente desde Firestore (Fase 3)
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. SELECTORES DE NAVEGACIÓN
@@ -67,15 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <footer class="btn-group" style="display: flex; gap: 10px; align-items: center; margin-top: auto;">
                     ${!course.isComingSoon ? `
-                        <button class="btn-reveal-purpose" data-action="purpose" data-id="${course.id}" style="margin-top: 0; flex: 1; font-size: 0.65rem; padding: 12px 5px; white-space: nowrap; text-align: center;">
-                            Propósito
+                        <button class="btn-primary" data-action="purpose" data-id="${course.id}" style="margin-top: 0; flex: 1; font-size: 0.65rem; padding: 8px 5px; white-space: nowrap; text-align: center; background: none; color: var(--primary-midnight); border: 1.5px solid var(--primary-midnight);">
+                            PROPOSITO
                         </button>
                     ` : ''}
                     <button class="btn-primary" 
                         ${course.isComingSoon ? 'disabled style="background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none;"' : ''}
                         data-action="open" 
                         data-id="${course.id}"
-                        style="flex: 1.5; font-size: 0.7rem; padding: 12px 8px; ${course.id === 'live' ? 'background: #fff; color: var(--secondary-color); border: 2px solid var(--secondary-color);' : ''}">
+                        style="flex: 1.5; font-size: 0.7rem; padding: 12px 8px;">
                         ${course.isComingSoon ? 'Próximamente' : course.buttonText}
                     </button>
                 </footer>
@@ -83,8 +47,52 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
     };
 
-    // Ejecutamos el renderizado inicial
-    renderLobby();
+    // 0. MOTOR DE CARGA DINÁMICA (FASE 3: DINAMIZACIÓN)
+    /**
+     * Recupera la configuración de cursos desde Firestore.
+     * Esto elimina la dependencia de datos "hardcoded" en el JS.
+     */
+    const fetchCoursesConfig = async () => {
+        const lobbyContainer = document.getElementById('course-lobby');
+        if (lobbyContainer) {
+            lobbyContainer.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                    <p style="color: #666; font-weight: 500;">⏳ Sincronizando catálogo de soluciones...</p>
+                </div>`;
+        }
+
+        try {
+            // Consultamos la colección 'config_ecosistema' ordenada por el campo 'orden'
+            const q = query(collection(db, "config_ecosistema"), orderBy("orden", "asc"));
+            const querySnapshot = await getDocs(q);
+            
+            // Reiniciamos el registro maestro con los datos frescos de la nube
+            COURSES_CONFIG = [];
+            querySnapshot.forEach((doc) => {
+                COURSES_CONFIG.push({ 
+                    id: doc.id, 
+                    ...doc.data() 
+                });
+            });
+
+            console.log(`✅ Dreams Cloud: ${COURSES_CONFIG.length} cursos sincronizados.`);
+            
+            // Una vez que tenemos la data, disparamos el renderizado visual
+            renderLobby(); 
+
+        } catch (error) {
+            console.error("🚨 Error crítico al sincronizar el catálogo:", error);
+            if (lobbyContainer) {
+                lobbyContainer.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #c62828;">
+                        <p>⚠️ Error de conexión con el catálogo. Por favor, verifica tu internet y recarga la página.</p>
+                    </div>`;
+            }
+        }
+    };
+
+    // Iniciamos el ciclo de vida dinámico
+    fetchCoursesConfig();
 
     // Selector recuperado para navegación
     const btnBackToLobby = document.getElementById('btn-back-to-lobby');
@@ -113,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${slide.title ? `<h2>${slide.title}</h2>` : ''}
                 ${slide.subtitle ? `<p>${slide.subtitle}</p>` : ''}
                 ${slide.content ? `<div>${slide.content}</div>` : ''}
-                ${slide.image ? `<img src="${slide.image.src}" alt="${slide.image.alt || ''}" class="slide-image">` : ''}
+                ${slide.image ? `<img src="${DREAMS_CONFIG.resolvePath(slide.image.src, currentSessionData.courseMetadata.sessionId)}" alt="${slide.image.alt || ''}" class="slide-image">` : ''}
             `;
             
             if (slide.workbookLink) {
@@ -158,28 +166,23 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (shouldHide) {
             el.classList.add('podcast-hidden');
+            // Seguridad: Al ocultar la burbuja, pausamos el video de Firebase por si seguía sonando
+            if (elementId === 'video-tutorial') {
+                document.getElementById('tutorial-video')?.pause();
+            }
         } else {
             el.classList.remove('podcast-hidden');
-            // Lógica para Video Local: Sincronización forzada con la sesión activa (A/B/C)
+            
+            // Inteligencia de Reproducción: Detectamos cuál reproductor está activo
             if (elementId === 'video-tutorial') {
                 const video = document.getElementById('tutorial-video');
-                const videoUrl = currentSessionData?.multimedia?.tutorialUrl;
-
-                if (video && videoUrl) {
-                    // Protocolo de Limpieza de Ruta: Eliminamos la barra inicial para evitar errores 404
-                    const cleanVideoUrl = videoUrl.startsWith('/') ? videoUrl.substring(1) : videoUrl;
-                    const finalUrl = encodeURI(cleanVideoUrl);
-
-                    // Solo recargamos si la sesión ha cambiado para no interrumpir la reproducción actual
-                    if (video.getAttribute('data-loaded-url') !== finalUrl) {
-                        video.src = finalUrl;
-                        video.setAttribute('data-loaded-url', finalUrl);
-                        video.load();
-                    }
-
+                
+                // Si el video de Firebase es el que está visible, le damos Play automáticamente
+                if (video && window.getComputedStyle(video).display !== 'none') {
                     video.play().catch(() => console.log("Interacción requerida para reproducir"));
-                    video.volume = 0.4; // Nivel de confort definido en Ficha Técnica
+                    video.volume = 0.4; 
                 }
+                // Nota: Los iframes de YouTube se gestionan solos o por interacción del usuario
             }
         }
     };
@@ -197,24 +200,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listener para el botón de cierre del podcast (Mantiene compatibilidad)
     document.getElementById('btn-close-podcast')?.addEventListener('click', () => toggleBubble('podcast-player', false));
 
-    // --- LÓGICA DE LAS BURBUJAS DE PROPÓSITO (DIFERENCIADAS) ---
-    const setupPurposeBubble = (type) => {
-        const btnShow = document.getElementById(`btn-show-purpose-${type}`);
-        const btnClose = document.getElementById(`btn-close-purpose-${type}`);
-        const overlay = document.getElementById(`purpose-overlay-${type}`);
+    // --- LÓGICA DE LA BURBUJA DE PROPÓSITO UNIVERSAL (DINÁMICA - FASE 3) ---
+    const showPurpose = (courseId) => {
+        const course = COURSES_CONFIG.find(c => c.id === courseId);
+        if (!course) return;
 
-        btnShow?.addEventListener('click', () => overlay?.classList.add('active'));
-        btnClose?.addEventListener('click', () => overlay?.classList.remove('active'));
-        overlay?.addEventListener('click', (e) => {
-            if (e.target === overlay) overlay.classList.remove('active');
-        });
+        const overlay = document.getElementById('purpose-overlay-universal');
+        const titleEl = document.getElementById('universal-purpose-title');
+        const contentEl = document.getElementById('universal-purpose-content');
+
+        if (overlay && titleEl && contentEl) {
+            // Inyectamos la data de Firestore en el cascarón HTML
+            titleEl.innerText = course.purposeTitle || "Propósito del Programa";
+            contentEl.innerHTML = course.purposeDesc || course.description;
+            overlay.classList.add('active');
+        }
     };
 
-    // 1. Inicializamos la lógica de cierre para las burbujas de propósito (estáticas en HTML)
-    setupPurposeBubble('online');
-    setupPurposeBubble('live');
+    // Listener único para cerrar la burbuja universal
+    document.getElementById('btn-close-purpose-universal')?.addEventListener('click', () => {
+        document.getElementById('purpose-overlay-universal').classList.remove('active');
+    });
 
-    // 2. DELEGACIÓN DE EVENTOS: El "vigilante" del Lobby para botones dinámicos
+    // Cerrar al hacer clic fuera del contenido (en el fondo oscuro)
+    document.getElementById('purpose-overlay-universal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'purpose-overlay-universal') {
+            e.target.classList.remove('active');
+        }
+    });
+
+    // 2. DELEGACIÓN DE EVENTOS (OPTIMIZADA): El vigilante del Lobby
     const lobbyContainer = document.getElementById('course-lobby');
     if (lobbyContainer) {
         lobbyContainer.addEventListener('click', (e) => {
@@ -223,14 +238,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const { action, id } = btn.dataset;
 
-            // Acción: Abrir el curso/módulo
             if (action === 'open') {
-                startModule(id.toUpperCase());
-            } 
-            // Acción: Revelar el propósito (Overlay)
+                // Mantenemos el ID original (Case Sensitive) para asegurar la trazabilidad con Firestore
+                startModule(id);
+            }
             else if (action === 'purpose') {
-                const overlay = document.getElementById(`purpose-overlay-${id}`);
-                if (overlay) overlay.classList.add('active');
+                // Ahora llamamos a la función dinámica en lugar de buscar un ID estático
+                showPurpose(id);
             }
         });
     }
@@ -271,19 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Control de botones "Volver" (Limpieza de interfaz al salir)
     const btnPresBack = document.getElementById('btn-pres-back-to-lobby');
     
-    if (btnPresBack) {
-        btnPresBack.addEventListener('click', () => {
-            // 1. Limpieza de burbujas
-            ['podcast-player', 'video-tutorial', 'view-workbook'].forEach(id => toggleBubble(id, false));
-            
-            // 2. Restauración de UI: Quitamos rastro de Reveal y desactivamos Modo Cinema
-            document.body.classList.remove('reveal-viewport', 'cinema-mode');
-            document.body.removeAttribute('style'); 
-            
-            viewPresentation.style.display = 'none';
-            viewLobby.style.display = 'block';
-        });
-    }
+    // Bloque removido para permitir que returnToLobby gestione la navegación jerárquica.
 
     // 3. Control de botones "Volver" (Sincronización de Navegación)
     const btnNavBack = document.querySelector('.btn-nav-back'); // Botón del Header
@@ -327,7 +329,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
    // --- MOTOR DE PERSISTENCIA UNIVERSAL (DEBOUNCE) ---
 
-    const syncWithSheets = async (inputElement) => {
+    /**
+     * MOTOR DE PERSISTENCIA CLOUD (FASE 2): Sustituye Google Sheets por Firestore.
+     * Garantiza que los cambios realizados directamente en la vista de la Academia
+     * se guarden en la misma ubicación que los del Workbook (Trazabilidad Unificada).
+     */
+    const syncWithCloud = async (inputElement) => {
         if (!inputElement) return;
 
         const fieldId = inputElement.dataset.id || inputElement.id;
@@ -337,34 +344,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (value === undefined || value === "") return;
 
-        statusMessage.innerText = "⏳ Sincronizando avance...";
+        const user = auth.currentUser;
+        if (!user) return;
+
+        statusMessage.innerText = "⏳ Guardando en la nube...";
         statusMessage.style.color = "#666";
 
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwApwF3Ve0SwUcvu8ZjsiiucnffURI25zSiE9ldrdmP_a9a7mBtn9HE_sfk99IY-Rzh/exec";
-        
-        const curso = currentSessionData?.courseMetadata?.courseName || "Consolida 360°";
-        const sesion = currentSessionData?.courseMetadata?.sessionTitle || "Sesión General";
-        const modalidad = currentSessionData?.courseMetadata?.modality || "N/A";
+        // Recuperamos IDs de sesión para ubicar el documento correcto en Firestore
+        const sessionId = currentSessionData?.courseMetadata?.sessionId || 'sesion_general';
+        const docRef = doc(db, "usuarios", user.uid, "progreso_workbooks", sessionId);
 
         try {
-            // Sincronización Local (Crucial para que el Workbook vea los cambios)
+            // 1. Persistencia Local (Caché de resiliencia)
             localStorage.setItem('cuaderno_' + fieldId, value);
 
-            await fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({
-                    email: auth.currentUser ? auth.currentUser.email : "Usuario Anónimo",
-                    fieldId: fieldId, 
-                    respuesta: value,
-                    contexto: `${curso} | ${sesion} (${modalidad})`
-                })
-            });
-            statusMessage.innerText = "✅ Sincronizado (Local + Nube).";
+            // 2. Persistencia Firestore (La verdad única)
+            await setDoc(docRef, {
+                [fieldId]: value,
+                lastUpdate: new Date().toISOString(),
+                courseID: currentSessionData?.courseMetadata?.courseId || 'consolida-360'
+            }, { merge: true });
+
+            statusMessage.innerText = "✅ Avance protegido en la nube.";
             statusMessage.style.color = "#2e7d32";
         } catch (error) {
-            console.error("Error en sincronización:", error);
-            statusMessage.innerText = "⚠️ Guardado localmente. Se sincronizará al reconectar.";
+            console.error("🚨 Error de persistencia Academia:", error);
+            statusMessage.innerText = "⚠️ Error de conexión. Avance guardado localmente.";
         }
     };
 
@@ -373,13 +378,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
             clearTimeout(autosaveTimer);
             statusMessage.innerText = "✍️ Escribiendo...";
-            autosaveTimer = setTimeout(() => syncWithSheets(e.target), 2000);
+            autosaveTimer = setTimeout(() => syncWithCloud(e.target), 2000);
         }
     });
 
     viewWorkbook.addEventListener('change', (e) => {
         if (e.target.type === 'radio' || e.target.type === 'checkbox' || e.target.tagName === 'SELECT') {
-            syncWithSheets(e.target);
+            syncWithCloud(e.target);
         }
     });
 
@@ -388,8 +393,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fase 4: Limpieza de seguridad para evitar colisiones entre módulos
         if (autosaveTimer) clearTimeout(autosaveTimer);
 
-        // Buscamos la configuración específica en nuestro registro maestro
-        const courseConfig = COURSES_CONFIG.find(c => c.id === courseId.toLowerCase());
+        // Buscamos la coincidencia exacta del ID sin forzar minúsculas
+        const courseConfig = COURSES_CONFIG.find(c => c.id === courseId);
         
         if (!courseConfig || !courseConfig.jsonPath) {
             console.error("Configuración de curso no encontrada para:", courseId);
@@ -454,21 +459,25 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         sessionList.innerHTML = sessions.map(session => `
-            <article class="card" style="border-top: 4px solid ${courseConfig.accentColor}">
-                <div class="card-content" style="text-align: center; padding: 30px 20px;">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">${session.icon}</div>
-                    <span class="card-category" style="color: #666;">${session.name}</span>
-                    <h3 style="margin: 10px 0; color: var(--primary-color);">${session.topic}</h3>
+            <article class="card" style="border-top: 4px solid ${courseConfig.accentColor}; display: flex; flex-direction: column; height: 100%;">
+                <div class="card-content" style="text-align: center; padding: 30px 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="font-size: 3rem; margin-bottom: 15px;">${session.icon}</div>
+                        <span class="card-category" style="color: #666;">${session.name}</span>
+                        <h3 style="margin: 10px 0; color: var(--primary-color);">${session.topic}</h3>
+                    </div>
+                    
                     <button class="btn-primary" 
                         onclick="window.dispatchEvent(new CustomEvent('loadSessionContent', { 
                             detail: { 
+                                courseId: '${courseConfig.id}',
                                 sessionId: '${session.id}', 
                                 sessionTitle: '${session.name}: ${session.topic}',
                                 modality: '${courseConfig.modality}',
                                 jsonPath: '${courseConfig.jsonPath}' 
                             } 
                         }))"
-                        style="margin-top: 15px; background: ${courseConfig.accentColor}">
+                        style="margin-top: 15px;">
                         Acceder a Sesión
                     </button>
                 </div>
@@ -537,9 +546,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     selector.innerHTML = '';
                     currentSessionData.multimedia.playlist.forEach(track => {
                         const option = document.createElement('option');
-                        // Limpieza de ruta para compatibilidad absoluta con servidores
-                        const cleanUrl = track.url.startsWith('/') ? track.url.substring(1) : track.url;
-                        option.value = encodeURI(cleanUrl);
+                        // Usamos el motor central para obtener la URL de Firebase
+                        option.value = DREAMS_CONFIG.resolvePath(track.url, sessionId);
                         option.textContent = track.title;
                         selector.appendChild(option);
                     });
@@ -557,12 +565,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // 3. Sincronización de Video (Tutorial de Sesión)
-                if (videoElement && currentSessionData.multimedia.tutorialUrl) {
-                    const cleanVideoUrl = currentSessionData.multimedia.tutorialUrl.startsWith('/') 
-                        ? currentSessionData.multimedia.tutorialUrl.substring(1) 
-                        : currentSessionData.multimedia.tutorialUrl;
-                    videoElement.src = encodeURI(cleanVideoUrl);
-                    videoElement.load();
+                if (currentSessionData.multimedia.tutorialUrl) {
+                    const youtubeElement = document.getElementById('tutorial-youtube');
+                    const resolvedUrl = DREAMS_CONFIG.resolvePath(currentSessionData.multimedia.tutorialUrl, sessionId);
+
+                    if (resolvedUrl.includes('youtube.com/embed')) {
+                        // MODO YOUTUBE: Activamos iframe, ocultamos video nativo
+                        if (youtubeElement) {
+                            youtubeElement.src = resolvedUrl;
+                            youtubeElement.style.display = 'block';
+                        }
+                        if (videoElement) {
+                            videoElement.style.display = 'none';
+                            videoElement.pause(); // Seguridad: Evita audio duplicado
+                        }
+                    } else {
+                        // MODO FIREBASE/MP4: Activamos video nativo, ocultamos iframe
+                        if (videoElement) {
+                            videoElement.src = resolvedUrl;
+                            videoElement.load();
+                            videoElement.style.display = 'block';
+                        }
+                        if (youtubeElement) {
+                            youtubeElement.style.display = 'none';
+                            youtubeElement.src = ''; // Limpiamos para detener carga de YT
+                        }
+                    }
                 }
             }
 

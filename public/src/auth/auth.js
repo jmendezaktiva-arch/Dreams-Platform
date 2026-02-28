@@ -1,3 +1,4 @@
+//public/src/auth
 import { auth, db, doc, getDoc } from '../shared/firebase-config.js';
 import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -22,11 +23,13 @@ export const login = async (email, password) => {
 
 export const redirectByUserRole = async (uid) => {
     try {
-        const userDoc = await getDoc(doc(db, "users", uid));
+        // Corregido: Apuntamos a la colección 'usuarios' según el blueprint
+        const userDoc = await getDoc(doc(db, "usuarios", uid));
         
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const role = userData.role;
+            // Corregido: El campo en Firestore y en las reglas es 'rol' (en español)
+            const role = userData.rol;
             
             // Confirmación visual del reconocimiento de rol
             alert(`¡Conexión exitosa! Perfil detectado: ${role}`);
@@ -36,7 +39,7 @@ export const redirectByUserRole = async (uid) => {
             window.location.href = targetPath;
         } else {
             alert("Acceso denegado: Tu usuario no tiene un perfil de rol configurado en Firestore.");
-            console.error("Error: No existe documento en la colección 'users' para el UID:", uid);
+            console.error("Error: No existe documento en la colección 'usuarios' para el UID:", uid);
         }
     } catch (error) {
         alert("Error crítico al verificar permisos de usuario.");

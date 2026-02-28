@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuaderno de Trabajo Sesión A - Consolida 360° | Dreams</title>
+    <title>Workbook: Ecosistema Digital - Consolida 360° | Dreams</title>
     
     <link rel="icon" type="image/png" href="/assets/images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -15,7 +15,6 @@
     <script src="../../../../../shared/workbook-core.js"></script>
     
     <link rel="stylesheet" href="/assets/css/style.css">
-    
 </head>
 
 <body class="text-gray-800 bg-[#F5F5F0]">
@@ -28,7 +27,7 @@
             </div>
             
             <div class="mb-8">
-                <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Progreso de Sesión</h4>
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Progreso Sesión B</h4>
                 <div class="w-full bg-gray-100 rounded-full h-1.5">
                     <div id="progress-bar" class="bg-brand-blue h-1.5 rounded-full transition-all duration-700" style="width: 0%"></div>
                 </div>
@@ -44,10 +43,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    EXPORTAR PLAN MAESTRO
+                    EXPORTAR ESTRATEGIA B
                 </button>
                 <div id="loading" class="hidden mt-4 text-center">
-                    <p class="text-[10px] text-brand-blue animate-pulse font-bold uppercase tracking-widest">Generando PDF...</p>
+                    <p class="text-[10px] text-brand-blue animate-pulse font-bold uppercase tracking-widest">Generando Reporte Digital...</p>
                 </div>
             </div>
         </aside>
@@ -57,7 +56,7 @@
             <header class="bg-white shadow-sm rounded-3xl p-8 mb-10 border-l-[12px] border-brand-blue relative overflow-hidden">
                 <div class="relative z-10">
                     <h1 id="workbook-course-name" class="text-brand-blue font-black text-2xl uppercase tracking-tighter">Cuaderno de Trabajo Interactivo</h1>
-                    <p id="workbook-session-title" class="text-lg text-gray-500 mt-1 font-light italic">"De Tareas a Resultados: Transforma la forma de delegar y liderar"</p>
+                    <p id="workbook-session-title" class="text-lg text-gray-500 mt-1 font-light italic">"Impulsa tu PyME: Ecosistema Digital de Ventas"</p>
                     
                     <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="group">
@@ -78,8 +77,8 @@
             <div id="reporte" class="hidden bg-white p-12 rounded-[2rem] shadow-2xl border border-gray-100 mt-10 print:block">
                 <div class="flex justify-between items-start border-b-4 border-brand-blue pb-8 mb-10">
                     <div>
-                        <h2 class="text-4xl font-black text-[#0F3460] uppercase tracking-tighter">Plan Maestro de Acción</h2>
-                        <p class="text-gray-400 font-light italic text-xl">Metodología Consolida 360°</p>
+                        <h2 class="text-4xl font-black text-[#0F3460] uppercase tracking-tighter">Ecosistema Digital de Ventas</h2>
+                        <p class="text-gray-400 font-light italic text-xl">Consolida 360° - Plan Maestro de Acción</p>
                     </div>
                     <img src="/assets/images/logo.png" alt="Logo" class="h-16 w-auto" crossorigin="anonymous">
                 </div>
@@ -92,33 +91,6 @@
                 </div>
 
         </main>
-    </div>
-
-    <div id="contact-overlay" class="purpose-overlay">
-        <div class="purpose-bubble" style="max-width: 500px;">
-            <button class="close-bubble" id="btn-close-contact">&times;</button>
-            
-            <header style="margin-bottom: 25px;">
-                <h2 style="color: var(--primary-midnight); font-weight: 700; font-size: 1.5rem; margin-bottom: 8px;">Asistencia Estratégica</h2>
-                <p style="font-weight: 300; font-size: 0.9rem; color: #666; line-height: 1.4;">¿Tienes alguna duda sobre la implementación del "Filtro 4+1" o necesitas apoyo técnico?</p>
-            </header>
-
-            <form id="contact-form" class="space-y-3">
-                <input type="text" id="contact-name" placeholder="Nombre completo" class="w-full p-4 rounded-xl border border-gray-100 bg-gray-50" required>
-                <input type="email" id="contact-email" placeholder="Email institucional" class="w-full p-4 rounded-xl border border-gray-100 bg-gray-50" required>
-                <select id="contact-interest" class="w-full p-4 rounded-xl border border-gray-100 bg-gray-50" required>
-                    <option value="" disabled selected>¿En qué podemos apoyarte?</option>
-                    <option value="Metodología">Duda con un ejercicio</option>
-                    <option value="Consultoría">Consultoría 1 a 1</option>
-                    <option value="Soporte">Falla técnica</option>
-                </select>
-                <textarea id="contact-message" placeholder="Describe tu situación..." class="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 h-32 resize-none" required></textarea>
-                <button type="submit" class="w-full bg-[#957C3D] text-white py-4 rounded-xl font-bold hover:brightness-110 transition-all shadow-lg shadow-orange-900/10">
-                    ENVIAR SOLICITUD
-                </button>
-                <p id="contact-status" class="text-center text-xs font-bold mt-2"></p>
-            </form>
-        </div>
     </div>
 
     <script src="js/workbook-logic.js"></script>

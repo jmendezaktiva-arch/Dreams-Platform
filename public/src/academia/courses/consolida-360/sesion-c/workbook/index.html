@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuaderno de Trabajo Sesión C - Consolida 360° | Dreams</title>
+    
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script src="../../../../shared/workbook-core.js"></script>
+    
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="workbook-local.css">
+    
+</head>
+
+<body class="text-gray-800 bg-[#F5F5F0]">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        
+        <aside class="w-full md:w-64 bg-white shadow-lg p-6 sticky top-0 h-screen overflow-y-auto flex flex-col">
+            <div class="mb-8 flex justify-center">
+                <img src="/assets/images/logo.png" alt="Mi Empresa Crece" class="h-16 object-contain">
+            </div>
+
+            <nav id="sections-nav" class="flex-1 space-y-2">
+                </nav>
+
+            <div class="mt-8 pt-6 border-t border-gray-100">
+                <div class="bg-blue-50 p-4 rounded-xl mb-4">
+                    <p class="text-[10px] uppercase tracking-wider text-blue-600 font-bold mb-1">Progreso General</p>
+                    <div class="w-full bg-blue-100 h-2 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="bg-[#0F3460] h-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <button id="export-pdf" class="w-full py-3 bg-[#957C3D] text-white rounded-xl font-bold text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    DESCARGAR PLAN
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-4 md:p-12 overflow-y-auto">
+            <div id="workbook-container" class="max-w-4xl mx-auto">
+                <div class="flex items-center justify-center h-64">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0F3460]"></div>
+                </div>
+            </div>
+
+            <footer class="max-w-4xl mx-auto mt-12 flex justify-between items-center border-t border-gray-200 pt-8 pb-12">
+                <button id="prev-section" class="flex items-center gap-2 text-gray-500 hover:text-[#0F3460] font-bold transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    ANTERIOR
+                </button>
+                <span id="section-counter" class="text-xs font-bold text-gray-400 tracking-widest uppercase">CARGANDO...</span>
+                <button id="next-section" class="flex items-center gap-2 text-[#0F3460] hover:text-[#957C3D] font-bold transition-colors">
+                    SIGUIENTE
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </footer>
+        </main>
+    </div>
+
+    <div id="fcl-modal" class="help-overlay">
+        <div class="help-bubble">
+            <button id="fcl-close" class="close-bubble">&times;</button>
+            <h2 class="text-2xl font-black text-[#0F3460] mb-4">Definición del Flujo de Caja Libre (FCL)</h2>
+            <div class="space-y-4 text-sm text-gray-600 leading-relaxed">
+                <p>Es el dinero que queda disponible en la empresa después de haber cubierto todos los costos operativos y gastos fijos, incluyendo el sueldo de mercado del dueño.</p>
+                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 font-mono text-xs text-[#0F3460]">
+                    FCL = Ingresos Totales - Costos Variables - Gastos Fijos
+                </div>
+                <p>Este indicador es vital porque representa la <strong>capacidad real de crecimiento</strong>. Si tu FCL es negativo, no estás listo para invertir; si es positivo, ese excedente es el motor de tu libertad financiera.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="plazo-modal" class="help-overlay">
+        <div class="help-bubble">
+            <button id="plazo-close" class="close-bubble">&times;</button>
+            <h2 class="text-2xl font-black text-[#0F3460] mb-4">Evaluación del Plazo de Recuperación (Payback)</h2>
+            <div class="space-y-4 text-sm text-gray-600 leading-relaxed">
+                <p>Mide el tiempo necesario para recuperar la inversión inicial a través del flujo de caja generado por el proyecto.</p>
+                <p>En el modelo <strong>Consolida 360°</strong>, el plazo de recuperación aceptable es menor a 12 meses. Si tu proyecto toma más tiempo, es posible que el riesgo sea demasiado alto o el margen sea insuficiente.</p>
+                <div class="grid grid-cols-2 gap-4 mt-6">
+                    <div class="bg-green-50 p-3 rounded-lg border border-green-100 text-center">
+                        <p class="font-bold text-green-800 text-lg">0-12 Meses</p>
+                        <p class="text-xs text-green-700 font-semibold">Saludable</p>
+                    </div>
+                    <div class="bg-red-50 p-3 rounded-lg border border-red-100 text-center">
+                        <p class="font-bold text-red-800 text-lg">+12 Meses</p>
+                        <p class="text-xs text-red-700 font-semibold">Revisar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="workbook-logic.js"></script>
+
+</body>
+</html>
