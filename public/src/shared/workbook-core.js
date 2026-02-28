@@ -26,7 +26,7 @@ const WorkbookCore = {
         this.config.autosaveTimer = setTimeout(() => {
             console.log(`☁️ Intentando sincronizar: ${fieldId}`);
             this.syncQueue.push({
-                fieldId: fieldId,
+                id: fieldId, // Normalizamos a "id" para hacer match con app.js
                 value: this.utils.sanitize(value)
             });
         }, this.config.debounceTime);
