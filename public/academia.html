@@ -1,3 +1,5 @@
+//public/academia.html
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,12 +21,12 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        // Establecemos Montserrat como la fuente base de Tailwind
                         'sans': ['Montserrat', 'ui-sans-serif', 'system-ui'],
                     },
                     colors: {
-                        'brand-blue': '#00529B',
-                        'brand-orange': '#F68D2E',
+                        // Sincronización con Design Tokens de style.css
+                        'brand-blue': '#0F3460', 
+                        'brand-orange': '#957C3D',
                     }
                 }
             }
@@ -46,8 +48,8 @@
     </div>
 
     <div class="contact-container" style="width: 180px; display: flex; justify-content: flex-end;">
-        <button id="btn-open-contact" title="Enviar mensaje a soporte" style="background: var(--primary-midnight); color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; border: 1px solid var(--accent-gold); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(15, 52, 96, 0.15);">
-            ✉️
+        <button id="btn-open-contact" class="btn-contact-trigger" title="Asistencia y Soporte">
+            <span class="btn-text">Asistencia</span> ✉️
         </button>
     </div>
 </header>
@@ -81,7 +83,7 @@
                             <button class="btn-reveal-purpose" id="btn-show-purpose-live">Revelar Propósito de Mentoría</button>
                         </div>
                         <div class="btn-group">
-                            <button class="btn-primary" id="btn-open-live" style="background: #fff; color: var(--secondary-color); border: 2px solid var(--secondary-color); font-size: 0.8rem;">Entrar al Cuaderno Live</button>
+                            <button class="btn-primary" id="btn-open-live" style="font-size: 0.8rem;">Entrar al Cuaderno Live</button>
                         </div>
                     </article>
 
@@ -132,6 +134,9 @@
                         <button id="btn-toggle-podcast" class="btn-bubble-toggle" title="Material de Apoyo" style="background: white; border: none; width: 58px; height: 58px; border-radius: 50%; font-size: 1.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">🎧</button>
                         
                         <button id="btn-toggle-workbook" class="btn-bubble-toggle" title="Cuaderno de Trabajo" style="background: white; border: none; width: 58px; height: 58px; border-radius: 50%; font-size: 1.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">📝</button>
+
+                        <button class="btn-bubble-toggle btn-contact-trigger" title="Soporte y Asistencia" style="background: white; border: none; width: 58px; height: 58px; border-radius: 50%; font-size: 1.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">✉️</button>
+
                     </nav>
                 </div>
             </div>
@@ -141,22 +146,37 @@
                     <span style="font-size: 0.7rem; font-weight: 600;">VIDEO TUTORIAL</span>
                     <button onclick="document.getElementById('video-tutorial').classList.add('podcast-hidden')" style="background:none; border:none; color:white; cursor:pointer;">&times;</button>
                 </div>
-                <div style="padding: 10px;">
-                    <video id="tutorial-video" width="100%" height="auto" controls 
+                <div id="tutorial-media-container" style="padding: 10px; aspect-ratio: 16/9;">
+                    <video id="tutorial-video" width="100%" height="100%" controls 
                            controlsList="nodownload" 
                            oncontextmenu="return false;" 
                            disablePictureInPicture
-                           style="border-radius: 8px; display: block; background: #000;">
+                           style="border-radius: 8px; display: block; background: #000; object-fit: contain;">
                         <source id="video-source" src="" type="video/mp4">
-                        Tu navegador no soporta la reproducción de video.
                     </video>
+
+                    <iframe id="tutorial-youtube" width="100%" height="100%" 
+                            src="" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen 
+                            style="border-radius: 8px; display: none; background: #000;">
+                    </iframe>
                 </div>
             </div>
 
             <div id="view-workbook" style="display: none; height: 90vh;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <button id="btn-back-to-lobby" style="background: none; border: none; color: var(--primary-color); cursor: pointer; font-weight: 600; font-size: 0.9rem;">← VOLVER AL CURSO</button>
-                    <span id="status-message" style="font-size: 0.75rem; color: #999;"></span>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div>
+                            <button id="btn-back-to-lobby" style="background: none; border: none; color: var(--primary-color); cursor: pointer; font-weight: 600; font-size: 0.9rem;">← VOLVER AL CURSO</button>
+                            <br>
+                            <span id="status-message" style="font-size: 0.75rem; color: #999; margin-left: 5px;"></span>
+                        </div>
+                        <button class="btn-contact-trigger" title="Soporte técnico" style="background: none; border: 1px solid var(--accent-gold); color: var(--primary-midnight); padding: 8px 15px; border-radius: 8px; font-size: 0.65rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                            AYUDA ✉️
+                        </button>
+                    </div>
+                    
                 </div>
                 
                 <iframe id="workbook-iframe" src="" style="width: 100%; height: 100%; border: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);"></iframe>
@@ -177,22 +197,12 @@
             </audio>
         </div>
 
-        <div id="purpose-overlay-online" class="purpose-overlay">
+        <div id="purpose-overlay-universal" class="purpose-overlay">
             <div class="purpose-bubble">
-                <button class="close-bubble" id="btn-close-purpose-online">&times;</button>
-                <h3 style="color: var(--primary-color); margin-top: 0; line-height: 1.2;">De Dueño Agotado a Líder de una Empresa Próspera y Autónoma</h3>
-                <p style="margin-top: 15px;">Deja de ser el cuello de botella de tu propio crecimiento. En 30 días, transforma tu PYME en una organización responsable, rentable y con propósito. Implementamos sistemas de autonomía, ecosistemas digitales de venta y marcos financieros de alta precisión.</p>
-                <p style="margin-top: 10px;"><strong>Beneficios:</strong> Libertad Real (equipo autónomo), Crecimiento Predecible y Seguridad Financiera (Filtro 4+1).</p>
-                <p style="margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px; font-style: italic;"><strong>Nuestra Garantía:</strong> Generamos valor organizacional o te regresamos tu dinero.</p>
-            </div>
-        </div>
-        <div id="purpose-overlay-live" class="purpose-overlay">
-            <div class="purpose-bubble">
-                <button class="close-bubble" id="btn-close-purpose-live">&times;</button>
-                <h3 style="color: var(--primary-color); margin-top: 0; line-height: 1.2;">Consolida 360° LIVE: De Dueño Agotado a Líder de una Empresa Próspera y Autónoma</h3>
-                <p style="margin-top: 15px;">Rompe la dependencia operativa del líder mediante interacción directa y feedback inmediato del facilitador. En 4 semanas, implementamos sistemas de autonomía, ecosistemas digitales de venta y marcos financieros de alta precisión.</p>
-                <p style="margin-top: 10px;"><strong>Formato de Alto Impacto:</strong> Sesiones síncronas de 120 minutos + Implementación Real + Consultoría 1 a 1 personalizada para resolver tus retos específicos.</p>
-                <p style="margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; font-style: italic;"><strong>Nuestra Garantía:</strong> Generamos valor organizacional o te regresamos tu dinero. El riesgo es nuestro; el crecimiento es tuyo.</p>
+                <button class="close-bubble" id="btn-close-purpose-universal">&times;</button>
+                <h3 id="universal-purpose-title" style="color: var(--primary-color); margin-top: 0; line-height: 1.2;"></h3>
+                <div id="universal-purpose-content" style="margin-top: 15px; color: #4A5568; line-height: 1.6;">
+                    </div>
             </div>
         </div>
     </div>
@@ -214,14 +224,34 @@
                 <p style="font-weight: 300; font-size: 0.9rem; color: #666; line-height: 1.4;">¿Deseas escalar tu PyME o tienes alguna duda sobre nuestros programas? Estamos para servirte.</p>
             </header>
 
-            <form id="contact-form" style="display: flex; flex-direction: column; gap: 5px;">
+            <form id="contact-form" style="display: flex; flex-direction: column; gap: 10px;">
                 <div class="form-group">
-                    <input type="text" id="contact-name" placeholder="Nombre completo" required style="margin-bottom: 15px;">
+                    <input type="text" id="contact-name" placeholder="Nombre completo" required>
                 </div>
-                <button type="submit" class="btn-primary" id="btn-send-contact">
-                    Enviar Mensaje
+                
+                <div class="form-group">
+                    <input type="email" id="contact-email" placeholder="Correo electrónico" required>
+                </div>
+
+                <div class="form-group">
+                    <select id="contact-interest" required style="width: 100%; padding: 16px 20px; border-radius: 12px; border: 1.5px solid rgba(15, 52, 96, 0.12); font-family: 'Montserrat';">
+                        <option value="" disabled selected>¿En qué podemos apoyarte?</option>
+                        <option value="Duda Técnica">Duda con el Workbook</option>
+                        <option value="Consultoría">Consultoría estratégica</option>
+                        <option value="Soporte">Problema de acceso</option>
+                        <option value="Otro">Otro asunto</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <textarea id="contact-message" placeholder="Escribe tu duda o mensaje aquí..." required style="min-height: 120px; resize: none;"></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="btn-send-contact" style="margin-top: 10px;">
+                    ENVIAR MENSAJE
                 </button>
-                <p id="contact-status" style="font-size: 0.7rem; text-align: center; margin-top: 10px; color: var(--primary-midnight);"></p>
+                
+                <p id="contact-status" style="font-size: 0.75rem; text-align: center; margin-top: 10px; font-weight: 600; min-height: 20px;"></p>
             </form>
         </div>
     </div>

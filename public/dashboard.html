@@ -66,14 +66,34 @@
                 <p style="font-weight: 300; font-size: 0.9rem; color: #666; line-height: 1.4;">¿Deseas escalar tu PyME o tienes alguna duda sobre nuestros programas? Estamos para servirte.</p>
             </header>
 
-            <form id="contact-form" style="display: flex; flex-direction: column; gap: 5px;">
+            <form id="contact-form" style="display: flex; flex-direction: column; gap: 10px;">
                 <div class="form-group">
-                    <input type="text" id="contact-name" placeholder="Nombre completo" required style="margin-bottom: 15px;">
+                    <input type="text" id="contact-name" placeholder="Nombre completo" required>
                 </div>
-                <button type="submit" class="btn-primary" id="btn-send-contact">
-                    Enviar Mensaje
+                
+                <div class="form-group">
+                    <input type="email" id="contact-email" placeholder="Correo electrónico" required>
+                </div>
+
+                <div class="form-group">
+                    <select id="contact-interest" required style="width: 100%; padding: 16px 20px; border-radius: 12px; border: 1.5px solid rgba(15, 52, 96, 0.12); font-family: 'Montserrat';">
+                        <option value="" disabled selected>¿En qué podemos apoyarte?</option>
+                        <option value="Duda Técnica">Duda con el Workbook</option>
+                        <option value="Consultoría">Consultoría estratégica</option>
+                        <option value="Soporte">Problema de acceso</option>
+                        <option value="Otro">Otro asunto</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <textarea id="contact-message" placeholder="Escribe tu duda o mensaje aquí..." required style="min-height: 120px; resize: none;"></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="btn-send-contact" style="margin-top: 10px;">
+                    ENVIAR MENSAJE
                 </button>
-                <p id="contact-status" style="font-size: 0.7rem; text-align: center; margin-top: 10px; color: var(--primary-midnight);"></p>
+                
+                <p id="contact-status" style="font-size: 0.75rem; text-align: center; margin-top: 10px; font-weight: 600; min-height: 20px;"></p>
             </form>
         </div>
     </div>
