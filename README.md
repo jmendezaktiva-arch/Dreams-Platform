@@ -2,6 +2,9 @@ dreams-platform
 ├─ .DS_Store
 ├─ .firebaserc
 ├─ README.md
+├─ .gitignore
+├─ .gitatributes
+├─ cors.json
 ├─ firebase.json
 ├─ firestore.indexes.json
 ├─ firestore.rules
@@ -70,6 +73,7 @@ dreams-platform
       ├─ consultoria
       └─ shared
          ├─ .DS_Store
+         ├─ env-config.template.js         
          ├─ env-config.js
          └─ firebase-config.js
          └─ workbook-core.js         
