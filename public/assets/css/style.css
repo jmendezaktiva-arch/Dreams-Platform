@@ -1,22 +1,43 @@
+/*public/assets/css/style
 /* ========================================================================== */
 /* DREAMS ACADEMIA | ESTILOS INSTITUCIONALES "MI EMPRESA CRECE" */
 /* ========================================================================== */
 
 :root {
-    /* --- DESIGN TOKENS: PRESTIGE (QUIET LUXURY) --- */
-    --bg-base: #F5F5F0;           /* Marfil de Lino [cite: 6] */
-    --primary-midnight: #0F3460;  /* Azul Medianoche [cite: 7] */
-    --accent-terracotta: #E2725B; /* Terracota Suave [cite: 8] */
-    --accent-gold: #957C3D;       /* Oro Bronceado [cite: 9] */
+    /* --- DESIGN TOKENS: ASSETS & BRANDING (FASE 1) --- */
+    --logo-url: url("../../../assets/images/logo.png"); /* Ruta Maestra Centralizada */
+
+    /* --- DESIGN TOKENS: PRESTIGE (MARCA OFICIAL) --- */
+    --bg-base: #F5F5F0;           /* Marfil de Lino (Calidez sofisticada) */
+    --primary-midnight: #0F3460;  /* Azul Medianoche (Autoridad) */
+    --accent-gold: #957C3D;       /* Oro Bronceado (Exclusividad) */
     
-    /* Mapeo de Transición para mantener compatibilidad */
+    /* Mapeo de Identidad Blindado */
     --primary-color: var(--primary-midnight);
-    --accent-color: var(--accent-terracotta);
-    --secondary-color: var(--primary-midnight);
-    --text-color: #1A1A1A;        /* Negro Carbono para precisión [cite: 68] */
-    --heading-color: var(--primary-midnight);
-    --bg-color: var(--bg-base);
+    --accent-color: var(--accent-gold);
+    --text-color: #1A1A1A;
     --card-bg: #FFFFFF;
+
+    /* --- INFRAESTRUCTURA DE ESPACIADO (FASE 1) --- */
+    --container-max-width: 1400px; 
+    /* Padding Dinámico: escala suavemente de 1.5rem (p-6) a 3rem (p-12) según la pantalla */
+    --dynamic-padding: clamp(1.5rem, 5vw, 3rem); 
+    --content-gap: 1.5rem;
+}
+
+/* Expansión del Canvas de Trabajo y Normalización */
+.container, .main-content {
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--content-gap);
+    box-sizing: border-box;
+}
+
+/* Corrección de Hiper-densidad: Se aplica el estándar dinámico p-6/p-12 */
+.section-content {
+    padding: var(--dynamic-padding) !important;
+    background-color: var(--card-bg);
 }
 
 /* Forzamos Montserrat en todos los elementos interactivos y definimos escala base */
@@ -43,33 +64,42 @@ body {
     color: var(--text-color);
 }
 
-/* --- JERARQUÍA TIPOGRÁFICA EDITORIAL (PRESTIGE) --- */
-h1, h2, h3, .reveal h1, .reveal h2, .reveal h3 {
-    font-family: 'Montserrat', sans-serif !important;
-    text-transform: none !important;
-    color: var(--primary-midnight) !important;
-}
-
+/* --- JERARQUÍA TIPOGRÁFICA PRESTIGE (MONTSERRAT CORE) --- */
+/* Encabezados Maestros: Autoridad y Claridad */
 h1, h2, .reveal h1, .reveal h2 {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 1.875rem !important; /* 30px optimizado para lectura rápida */
     font-weight: 700 !important;
-    letter-spacing: -0.02em !important; /* Rigor editorial: Tracking ajustado */
-    line-height: 1.2;
-}
-
-h3, .reveal h3 {
-    font-weight: 600 !important;
-    letter-spacing: -0.01em !important;
-}
-
-p, li, .reveal p, .reveal li {
-    font-weight: 300; /* Peso ligero para una estética sofisticada */
-    line-height: 1.7 !important; /* Incremento sutil de aire vertical */
+    color: var(--primary-midnight) !important;
+    letter-spacing: -0.02em !important; /* Tracking negativo para look editorial */
+    line-height: 1.3 !important;
     margin-bottom: 1.5rem;
+    text-transform: none !important;
 }
 
-/* Blindaje de legibilidad para énfasis y cálculos */
+/* Títulos de Módulos y Cards: Distinción Visual */
+h3, .reveal h3 {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 1.25rem !important; /* 20px estandarizado */
+    font-weight: 700 !important;
+    color: var(--primary-midnight) !important;
+    letter-spacing: -0.01em !important;
+    margin-bottom: 1rem;
+}
+
+/* Cuerpo de Texto: Lujo Silencioso y Legibilidad Extendida */
+p, li, .reveal p, .reveal li {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 300 !important; /* Peso light para sofisticación */
+    font-size: 1rem; /* 16px base */
+    line-height: 1.8 !important; /* Espaciado generoso para reducir fatiga visual */
+    color: var(--text-color);
+    margin-bottom: 1.25rem;
+}
+
+/* Énfasis y Datos Críticos: Blindaje de Trazabilidad */
 strong, b, .calculation-label {
-    font-weight: 600 !important;
+    font-weight: 600 !important; /* Semi-bold para destacar sin saturar */
     color: var(--primary-midnight);
 }
 
@@ -327,41 +357,53 @@ strong, b, .calculation-label {
     color: #ffffff;
 }
 
-/* --- ENTRADAS DE CRISTAL LÍQUIDO (WORKBOOK CONSOLE) --- */
-input:not([type="radio"]):not([type="checkbox"]), textarea {
+/* --- ENTRADAS DE CRISTAL LÍQUIDO: AISLAMIENTO QUIRÚRGICO (FASE 1) --- */
+/* Target exclusivo para campos de escritura, blindando botones y selectores */
+input[type="text"], 
+input[type="email"], 
+input[type="number"], 
+input[type="date"], 
+textarea,
+select {
     width: 100%;
     padding: 16px 20px;
-    margin: 10px 0 28px 0;
-    /* Efecto Liquid Glass */
-    background: rgba(255, 255, 255, 0.4) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    
-    border: 1px solid rgba(15, 52, 96, 0.1); /* Borde Midnight sutil */
-    border-radius: 14px;
+    margin: 8px 0 24px 0;
+    background: rgba(255, 255, 255, 0.5) !important; /* Opacidad Prestige inicial */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(15, 52, 96, 0.12); /* Definición aumentada */
+    border-radius: 12px;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
+    font-weight: 400;
     color: var(--text-color);
-    transition: all 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
-    /* Sombra interna para profundidad de cristal */
-    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5), 0 4px 6px rgba(15, 52, 96, 0.02);
-}
-
-input::placeholder, textarea::placeholder {
-    color: rgba(15, 52, 96, 0.4);
-    font-weight: 300;
-    letter-spacing: 0.02em;
-}
-
-input:focus, textarea:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.8) !important; /* El cristal se aclara al activarse */
-    border-color: var(--accent-gold); /* Foco en Oro Bronceado */
-    transform: translateY(-2px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 
-        0 10px 20px rgba(15, 52, 96, 0.05),
-        0 0 0 4px rgba(149, 124, 61, 0.1); /* Aura de Oro suave */
+        inset 0 1px 2px rgba(255, 255, 255, 0.8), 
+        0 2px 4px rgba(15, 52, 96, 0.02);
+}
+
+/* Mejora de Legibilidad del Placeholder (Contraste 4.5:1 para accesibilidad) */
+::placeholder {
+    color: rgba(26, 26, 26, 0.5) !important; /* Gris Midnight equilibrado */
+    font-weight: 300;
+}
+
+/* Estado de Enfoque: Claridad Absoluta en la Escritura */
+input[type="text"]:focus, 
+input[type="email"]:focus, 
+input[type="number"]:focus, 
+input[type="date"]:focus, 
+textarea:focus, 
+select:focus {
+    outline: none;
+    background: #FFFFFF !important; /* Fondo sólido al escribir para máxima legibilidad */
+    border-color: var(--accent-gold) !important;
+    transform: translateY(-1px);
+    box-shadow: 
+        0 8px 20px rgba(15, 52, 96, 0.06),
+        0 0 0 4px rgba(149, 124, 61, 0.15); /* Halo de Oro sutil */
 }
 
 /* ========================================================================== */
@@ -473,10 +515,19 @@ audio::-webkit-media-controls-play-button {
     border: 1px solid #eee;
 }
 
-/* Estilos base para Reveal (Legibilidad de Texto) */
+/* Estilos base para Reveal con Marca de Agua "Liquid Glass" */
 #view-presentation .reveal {
     font-family: 'Montserrat', sans-serif;
-    color: var(--text-color); /* Texto oscuro para contraste */
+    color: var(--text-color);
+    /* Patrón Geométrico Liquid Glass: Líneas diagonales ultra-sutiles */
+    background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(15, 52, 96, 0.03) 0px,
+        rgba(15, 52, 96, 0.03) 1px,
+        transparent 1px,
+        transparent 40px
+    );
+    background-color: #FFFFFF; /* Fondo base sólido para contraste */
 }
 
 /* Títulos de Diapositivas (Azul Institucional Recuperado) */
@@ -750,6 +801,25 @@ audio::-webkit-media-controls-play-button {
     box-shadow: 0 5px 15px rgba(0, 155, 119, 0.2);
 }
 
+/* Marca de Agua de Logo Fijo (No se desplaza con las diapositivas) */
+.presentation-wrapper::after {
+    content: "";
+    position: absolute;
+    bottom: 25px;
+    right: 35px;
+    width: 140px;
+    height: 60px;
+    background-image: var(--logo-url);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* Nivel alto de transparencia (0.1) para que sea minimalista y no compita con el texto */
+    opacity: 0.1; 
+    z-index: 10; 
+    pointer-events: none; /* Permite hacer clic a través del logo si hay botones debajo */
+    filter: grayscale(1); /* Opcional: lo hace monocromático para mayor elegancia */
+}
+
 /* ========================================================================== */
 /* REFINAMIENTO: CÁPSULA DE CONTACTO (FASE 3) */
 /* ========================================================================== */
@@ -801,37 +871,35 @@ audio::-webkit-media-controls-play-button {
 }
 
 /* ========================================================================== */
-/* BURBUJA DE CONTACTO GLOBAL (FAB) - FASE 3 */
+/* BOTÓN DE ASISTENCIA GLOBAL (HEADER PRESTIGE) */
 /* ========================================================================== */
-#btn-contact-fab {
-    position: fixed;
-    bottom: 30px;
-    left: 30px; /* Ubicación opuesta al podcast para no saturar la derecha */
-    width: 60px;
-    height: 60px;
+#btn-open-contact {
     background: var(--primary-midnight);
     color: white;
-    border-radius: 50%;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    border: 1.5px solid var(--accent-gold);
+    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 3000; /* Por encima de todo */
-    border: 1px solid var(--accent-gold);
-    box-shadow: 0 10px 25px rgba(15, 52, 96, 0.2);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    gap: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(15, 52, 96, 0.12);
 }
 
-#btn-contact-fab:hover {
-    transform: scale(1.1) rotate(5deg);
-    box-shadow: 0 15px 35px rgba(15, 52, 96, 0.3);
-    background: #164275;
+#btn-open-contact:hover {
+    transform: translateY(-2px);
+    background-color: #164275;
+    box-shadow: 0 8px 20px rgba(15, 52, 96, 0.2);
+    border-color: #FFFFFF; /* Brillo de contacto premium */
 }
 
-/* Ocultar en pantallas muy pequeñas si es necesario */
-@media (max-width: 600px) {
-    #btn-contact-fab { width: 50px; height: 50px; bottom: 20px; left: 20px; }
+#btn-open-contact:active {
+    transform: scale(0.95);
 }
 
 /* --- MEJORAS DE NAVEGACIÓN HOMOLOGADA --- */
@@ -878,4 +946,154 @@ body.cinema-mode #view-presentation > div {
 
 body.cinema-mode #view-workbook {
     height: 95vh !important; /* Casi toda la altura de la pantalla */
+}
+
+/* ========================================================================== */
+/* DREAMS WORKBOOK | INFRAESTRUCTURA DE INTERFAZ (CORE) */
+/* ========================================================================== */
+
+/* Sincronización de Clases de Marca (Heredadas de :root) */
+.brand-blue { color: var(--primary-color); }
+.brand-orange { color: var(--accent-color); }
+.bg-brand-blue { background-color: var(--primary-color); }
+.bg-brand-orange { background-color: var(--accent-color); }
+.border-brand-blue { border-color: var(--primary-color); }
+.border-brand-orange { border-color: var(--accent-color); }
+
+/* Transiciones de Secciones (Optimización "Sin Parpadeos") */
+.section-content { 
+    display: none; 
+    opacity: 0;
+}
+.section-content.active { 
+    display: block; 
+    animation: fadeInWorkbookSection 0.4s ease-out forwards; 
+}
+
+@keyframes fadeInWorkbookSection { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+/* Navegación del Cuaderno */
+.nav-link.active { 
+    background-color: #eef2ff !important; 
+    color: var(--primary-midnight) !important; 
+    font-weight: 700 !important; 
+    border-right: 4px solid var(--accent-gold) !important; 
+}
+
+/* Inputs Dinámicos y Feedback Visual */
+.autosave-input:focus { 
+    outline: 2px solid var(--primary-midnight) !important; 
+    border-color: transparent !important; 
+}
+
+.semaforo-radio:checked + label {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 3px var(--accent-gold);
+}
+
+/* Barra de Desplazamiento Personalizada Dreams (Estilo Prestige) */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { 
+    background: var(--primary-midnight); 
+    border-radius: 10px; 
+}
+::-webkit-scrollbar-thumb:hover { background: #164275; }
+
+/* Soporte para Exportación (PDF) */
+@media print {
+  .avoid-break { page-break-inside: avoid; }
+  .section-content { display: block !important; opacity: 1 !important; }
+}
+
+/* ========================================================================== */
+/* COMPONENTES DE AYUDA Y MODALES INFORMATIVOS (ESTILO PRESTIGE) */
+/* ========================================================================== */
+
+/* --- DISPARADOR DE AYUDA (ICONO "i") --- */
+.btn-help-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-midnight);
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--accent-gold);
+    vertical-align: middle;
+}
+
+.btn-help-trigger:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(149, 124, 61, 0.4);
+    background: var(--accent-gold);
+}
+
+/* --- CONTENEDOR DE MODAL GENÉRICO (LIQUID GLASS) --- */
+/* Reutilizamos la lógica de purpose-overlay para consistencia */
+.help-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 52, 96, 0.25);
+    backdrop-filter: blur(15px);
+    display: none; /* Controlado por JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.help-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.help-bubble {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(30px) saturate(180%) !important;
+    max-width: 600px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 40px 100px rgba(15, 52, 96, 0.2);
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.help-overlay.active .help-bubble {
+    transform: translateY(0);
+}
+
+/* --- CALL TO ACTION (CAT) DE ASESORÍA INTERMEDIA --- */
+.cat-advisory-box {
+    background: linear-gradient(135deg, rgba(15, 52, 96, 0.03), rgba(149, 124, 61, 0.05));
+    border: 1.5px dashed var(--accent-gold);
+    border-radius: 20px;
+    padding: 25px;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    animation: pulseBorder 3s infinite ease-in-out;
+}
+
+@keyframes pulseBorder {
+    0%, 100% { border-color: rgba(149, 124, 61, 0.3); }
+    50% { border-color: var(--accent-gold); }
 }
