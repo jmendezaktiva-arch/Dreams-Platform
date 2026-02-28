@@ -1,11 +1,11 @@
-/*public/assets/css/style
 /* ========================================================================== */
 /* DREAMS ACADEMIA | ESTILOS INSTITUCIONALES "MI EMPRESA CRECE" */
 /* ========================================================================== */
 
 :root {
-    /* --- DESIGN TOKENS: ASSETS & BRANDING (FASE 1) --- */
-    --logo-url: url("../../../assets/images/logo.png"); /* Ruta Maestra Centralizada */
+    /* TRACEABILIDAD: Se elimina la variable de ruta estática. 
+       La gestión de activos de marca ha sido migrada al motor dinámico en la nube 
+       para garantizar la integridad de la identidad visual en producción. */
 
     /* --- DESIGN TOKENS: PRESTIGE (MARCA OFICIAL) --- */
     --bg-base: #F5F5F0;           /* Marfil de Lino (Calidez sofisticada) */
@@ -290,25 +290,23 @@ strong, b, .calculation-label {
     max-width: 280px; /* Estrecha el texto para mejorar el 'justificado' visual  */
 }
 
-/* RESTRICCIÓN CRÍTICA DEL LOGO */
+/* RESTRICCIÓN CRÍTICA DEL LOGO (NORMALIZADA) */
 .login-hero-logo {
-    max-width: 180px;
+    max-width: 160px; 
     height: auto;
     display: block;
     filter: brightness(0) invert(1);
-    /* Desplazamiento independiente del flujo Flexbox */
-    transform: translateY(50px);
+    /* TRACEABILIDAD: Se eliminan los 'translateY' que eran parches para el logo antiguo. 
+       El centrado ahora es gestionado de forma nativa por Flexbox. */
 }
 
 .brand-content p {
     margin: 0 auto;
-    max-width: 300px;
+    max-width: 320px;
     font-weight: 300;
     line-height: 1.6;
-    opacity: 0.9;
+    opacity: 0.85;
     text-wrap: balance;
-    /* Elevación quirúrgica para compactar el bloque de marca */
-    transform: translateY(-40px);
 }
 
 .login-form-side {
@@ -629,15 +627,14 @@ audio::-webkit-media-controls-play-button {
 #view-presentation .lista-objetivos li::before {
     content: '';
     display: inline-block;
-    background-image: url('/src/academia/courses/consolida-360/sesion-a/presentation/images/slide-6.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    
-    /* Dimensiones originales recuperadas */
-    width: 28px;
-    height: 28px;
-    margin-right: 20px;
-    margin-top: 5px; /* Ajuste fino para centrar con el texto */
+    /* TRACEABILIDAD: Se elimina referencia local huérfana que causaba Error 404.
+       Sustituido por un glifo de marca (✓) para mantener la estética sin dependencias de archivos.
+    */
+    content: "✓";
+    color: var(--accent-gold);
+    font-weight: 900;
+    font-size: 1.2rem;
+    margin-right: 15px;
     flex-shrink: 0;
 }
 
@@ -801,23 +798,24 @@ audio::-webkit-media-controls-play-button {
     box-shadow: 0 5px 15px rgba(0, 155, 119, 0.2);
 }
 
-/* Marca de Agua de Logo Fijo (No se desplaza con las diapositivas) */
+/* MARCA DE AGUA DINÁMICA: Sello de Calidad "Mi Empresa Crece" */
 .presentation-wrapper::after {
     content: "";
     position: absolute;
-    bottom: 25px;
-    right: 35px;
-    width: 140px;
-    height: 60px;
-    background-image: var(--logo-url);
+    bottom: 30px;
+    left: 40px; /* Ajustado a la esquina inferior izquierda según tu preferencia */
+    width: 120px;
+    height: 50px;
+    /* TRACEABILIDAD: Usamos una variable dinámica que JS alimentará desde la nube */
+    background-image: var(--dynamic-logo-url); 
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center;
-    /* Nivel alto de transparencia (0.1) para que sea minimalista y no compita con el texto */
-    opacity: 0.1; 
-    z-index: 10; 
-    pointer-events: none; /* Permite hacer clic a través del logo si hay botones debajo */
-    filter: grayscale(1); /* Opcional: lo hace monocromático para mayor elegancia */
+    background-position: left bottom;
+    opacity: 0.15; /* Sutil pero visible para proteger la trazabilidad pedagógica */
+    z-index: 20; 
+    pointer-events: none;
+    filter: grayscale(1) brightness(0.8); 
+    transition: opacity 0.5s ease;
 }
 
 /* ========================================================================== */
