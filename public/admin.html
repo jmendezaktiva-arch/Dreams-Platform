@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Dreams</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div id="app">
+        <header class="navbar">
+            <div class="logo-container" style="width: 180px;">
+                <img id="main-logo" data-asset="logo.png" alt="Dreams Logo" class="logo-header opacity-0 transition-opacity duration-300">
+            </div>
+            <div style="flex-grow: 1;"></div>
+            <span style="font-size: 0.7rem; background: var(--primary-midnight); color: #fff; padding: 5px 12px; border-radius: 6px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">Admin Portal</span>
+        </header>
+
+        <main class="container">
+            <div class="card" style="width: 80%; max-width: 800px;">
+                <h2>Panel de Control Maestro</h2>
+                <p>Bienvenido, Jorge. Aquí podrás gestionar clientes y monitorear métricas de impacto.</p>
+                <hr style="border: 0.5px solid #eee; margin: 20px 0;">
+                <div id="admin-actions">
+                    <button class="btn-primary" style="width: auto; padding: 10px 20px;">Alta de Nuevo Cliente</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="src/shared/env-config.js"></script>
+
+    <script type="module" src="src/app.js"></script>
+</body>
+</html>
