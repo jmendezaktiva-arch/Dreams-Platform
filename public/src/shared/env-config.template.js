@@ -22,7 +22,10 @@ const DREAMS_CONFIG = {
         
         // 2. NORMALIZACIÓN DE CARPETA RAÍZ:
         // 'shared' apunta a la carpeta 'Shared' (Mayúscula), sesiones a 'sesion-x'.
-        const isShared = sessionInput === 'shared';
+        // INTERCEPTOR DE ACTIVOS GLOBALES: Identifica archivos que pertenecen al repositorio central
+        // independientemente de la sesión en la que se encuentre el usuario.
+        const globalAssets = ['contacto.png', 'reglas.png', 'guias.png', 'recorrido.png', 'logo.png'];
+        const isShared = sessionInput === 'shared' || globalAssets.includes(fileName.toLowerCase());
         const folderName = isShared ? 'Shared' : `sesion-${sessionInput.replace('sesion-', '').replace('sesion_', '')}`;
         
         // 3. DISCRIMINADOR QUIRÚRGICO DE SUB-CARPETAS:
