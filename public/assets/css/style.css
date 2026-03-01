@@ -263,11 +263,17 @@ strong, b, .calculation-label {
 
 .login-brand-side {
     background-color: var(--primary-midnight);
-    padding: 40px;
+    padding: 60px; /* Aumentamos el aire para evitar el efecto 'amontonado' */
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
+    color: #ffffff !important;
+}
+
+/* Blindaje de Contraste: Evita que el Midnight global oscurezca el texto sobre fondo azul */
+.login-brand-side h1, 
+.login-brand-side p {
+    color: #ffffff !important;
 }
 
 .brand-content {
@@ -359,6 +365,7 @@ strong, b, .calculation-label {
 /* Target exclusivo para campos de escritura, blindando botones y selectores */
 input[type="text"], 
 input[type="email"], 
+input[type="password"], 
 input[type="number"], 
 input[type="date"], 
 textarea,

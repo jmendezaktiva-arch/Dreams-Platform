@@ -1,9 +1,32 @@
 // public/src/app.js
 
-import { login } from './auth/auth.js';
+import { login, logout, redirectByUserRole } from './auth/auth.js';
 import { db, auth, doc, setDoc, getDoc } from './shared/firebase-config.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// Esperamos a que la página cargue totalmente
+// --- PERSISTENCIA DE SESIÓN (CENTINELA GLOBAL) ---
+// Este observador se dispara automáticamente al cargar cualquier página del ecosistema
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log(`✅ Sesión activa detectada: ${user.email}`);
+        
+        // PROTECCIÓN DE RUTAS: Si el usuario ya está logueado e intenta entrar al login (index), 
+        // lo enviamos directo a su área de trabajo según su rol.
+        if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+            redirectByUserRole(user.uid);
+        }
+    } else {
+        // SEGURIDAD: Si no hay sesión y el usuario intenta entrar a una página privada, 
+        // lo redirigimos al login para proteger la integridad del ecosistema.
+        const privatePages = ['/academia.html', '/dashboard.html', '/admin.html'];
+        if (privatePages.some(page => window.location.pathname.includes(page))) {
+            console.warn("⚠️ Acceso no autorizado. Redirigiendo al Login...");
+            window.location.href = '/index.html';
+        }
+    }
+});
+
+// Esperamos a que la página cargue totalmente para la lógica del DOM
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- MOTOR DE IDENTIDAD VISUAL (DINÁMICO) ---
@@ -20,34 +43,33 @@ document.addEventListener('DOMContentLoaded', () => {
         // presentes en Login, Dashboard y Academia simultáneamente.
         const assets = document.querySelectorAll('[data-asset]');
         
-        if (assets.length > 0 && window.DREAMS_CONFIG) {
-            assets.forEach(el => {
-                const assetName = el.dataset.asset;
-                
-                // NORMALIZACIÓN: Forzamos la carpeta 'Shared' (Mayúscula) para 
-                // activos de marca, garantizando compatibilidad con servidores Linux/Netlify.
-                const firebaseUrl = window.DREAMS_CONFIG.resolvePath(assetName, 'Shared');
-                
-                if (el.tagName === 'IMG') {
-                    el.src = firebaseUrl;
-                    el.onload = () => {
-                        el.classList.remove('opacity-0');
-                        el.classList.add('opacity-100');
-                    };
-                }
+        assets.forEach(el => {
+            const assetName = el.dataset.asset;
+            const firebaseUrl = window.DREAMS_CONFIG.resolvePath(assetName, 'Shared');
+            
+            // 1. SINCRONIZACIÓN DE ESTILOS (Marca de agua en CSS)
+            if (assetName === 'logo.png') {
+                document.documentElement.style.setProperty('--dynamic-logo-url', `url("${firebaseUrl}")`);
+            }
 
-                /**
-                 * SINCRONIZACIÓN DE MARCA DE AGUA INSTITUCIONAL:
-                 * Si el motor detecta el 'logo.png', inyecta su URL de la nube directamente
-                 * en el árbol de estilos CSS para activar el sello en las presentaciones.
-                 */
-                if (assetName === 'logo.png') {
-                    document.documentElement.style.setProperty('--dynamic-logo-url', `url("${firebaseUrl}")`);
-                }
+            // 2. LÓGICA DE RENDERIZADO PARA IMÁGENES
+            if (el.tagName === 'IMG') {
+                // Configuramos el manejador de errores ANTES de asignar el src
+                el.onerror = () => {
+                    console.warn(`⚠️ CDN no disponible para [${assetName}]. Ejecutando recuperación local.`);
+                    el.src = `assets/img/${assetName}`; // Corrección de backticks para template literal
+                    el.classList.remove('opacity-0');
+                    el.style.opacity = "1";
+                };
 
-                el.onerror = () => console.error(`🚨 Error de Identidad: No se halló [${assetName}] en la ruta nube.`);
-            });
-        }
+                el.onload = () => {
+                    el.classList.remove('opacity-0');
+                    el.style.opacity = "1";
+                };
+
+                if (firebaseUrl) el.src = firebaseUrl;
+            }
+        });
     };
 
     // Disparamos la carga de identidad visual de Mi Empresa Crece
@@ -56,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Localizamos el formulario de inicio de sesión por su ID
     const loginForm = document.getElementById('login-form');
 
-    // 1. LÓGICA DE AUTENTICACIÓN (LOGIN)
+    // 1. LÓGICA DE AUTENTICACIÓN (ACCESO Y SALIDA)
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault(); 
@@ -65,6 +87,21 @@ document.addEventListener('DOMContentLoaded', () => {
             await login(email, password);
         });
     }
+
+    // Manejador global de cierre de sesión (Logout)
+    // TRACEABILIDAD: Permite invalidar el token para que el Sentinel detenga la redirección automática.
+    document.addEventListener('click', async (e) => {
+        if (e.target.closest('#btn-logout')) {
+            e.preventDefault();
+            console.log("🚪 Cerrando sesión y liberando el Login...");
+            try {
+                await logout();
+                // El observador onAuthStateChanged detectará el cambio y permitirá estar en index.html
+            } catch (error) {
+                console.error("🚨 Error en la desconexión:", error);
+            }
+        }
+    });
 
     // 2. LÓGICA DE CONTACTO (FASE 3: HUMANIZACIÓN)
     const contactOverlay = document.getElementById('contact-overlay');

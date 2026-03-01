@@ -100,9 +100,31 @@ document.addEventListener('input', (e) => {
 
 window.addEventListener('message', (e) => {
     if (e.data.type === 'hydrateWorkbook' && e.data.payload) {
+        console.log("📦 Dreams Core: Hidratando UI con datos de la nube...");
+        
         Object.entries(e.data.payload).forEach(([key, val]) => {
+            // 1. Sincronización de Resiliencia (Caché local)
             localStorage.setItem('cuaderno_' + key, val);
+            
+            // 2. Inyección Quirúrgica en el DOM (Inputs/Textareas/Selects)
+            const el = document.getElementById(key) || document.getElementsByName(key)[0];
+            
+            if (el) {
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    el.checked = (val === true || val === 'true');
+                } else {
+                    el.value = val;
+                }
+                
+                /**
+                 * TRAZABILIDAD FINANCIERA: Disparamos un evento 'change' manual. 
+                 * Esto asegura que las fórmulas de cálculo del Filtro 4+1 se activen 
+                 * e impriman los resultados (ROI, Gastos, etc.) automáticamente al cargar.
+                 */
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+            }
         });
+        
         window.dispatchEvent(new CustomEvent('coreHydrated'));
     }
 });

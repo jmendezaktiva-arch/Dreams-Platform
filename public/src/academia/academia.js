@@ -327,66 +327,14 @@ document.addEventListener('DOMContentLoaded', () => {
     btnPresBack?.addEventListener('click', returnToLobby);
     btnBackToLobby?.addEventListener('click', returnToLobby);
 
-   // --- MOTOR DE PERSISTENCIA UNIVERSAL (DEBOUNCE) ---
-
-    /**
-     * MOTOR DE PERSISTENCIA CLOUD (FASE 2): Sustituye Google Sheets por Firestore.
-     * Garantiza que los cambios realizados directamente en la vista de la Academia
-     * se guarden en la misma ubicación que los del Workbook (Trazabilidad Unificada).
-     */
-    const syncWithCloud = async (inputElement) => {
-        if (!inputElement) return;
-
-        const fieldId = inputElement.dataset.id || inputElement.id;
-        const value = (inputElement.type === 'checkbox' || inputElement.type === 'radio') 
-                      ? inputElement.checked 
-                      : inputElement.value;
-
-        if (value === undefined || value === "") return;
-
-        const user = auth.currentUser;
-        if (!user) return;
-
-        statusMessage.innerText = "⏳ Guardando en la nube...";
-        statusMessage.style.color = "#666";
-
-        // Recuperamos IDs de sesión para ubicar el documento correcto en Firestore
-        const sessionId = currentSessionData?.courseMetadata?.sessionId || 'sesion_general';
-        const docRef = doc(db, "usuarios", user.uid, "progreso_workbooks", sessionId);
-
-        try {
-            // 1. Persistencia Local (Caché de resiliencia)
-            localStorage.setItem('cuaderno_' + fieldId, value);
-
-            // 2. Persistencia Firestore (La verdad única)
-            await setDoc(docRef, {
-                [fieldId]: value,
-                lastUpdate: new Date().toISOString(),
-                courseID: currentSessionData?.courseMetadata?.courseId || 'consolida-360'
-            }, { merge: true });
-
-            statusMessage.innerText = "✅ Avance protegido en la nube.";
-            statusMessage.style.color = "#2e7d32";
-        } catch (error) {
-            console.error("🚨 Error de persistencia Academia:", error);
-            statusMessage.innerText = "⚠️ Error de conexión. Avance guardado localmente.";
-        }
-    };
-
-    // Escuchador Global para el Workbook
-    viewWorkbook.addEventListener('input', (e) => {
-        if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
-            clearTimeout(autosaveTimer);
-            statusMessage.innerText = "✍️ Escribiendo...";
-            autosaveTimer = setTimeout(() => syncWithCloud(e.target), 2000);
-        }
-    });
-
-    viewWorkbook.addEventListener('change', (e) => {
-        if (e.target.type === 'radio' || e.target.type === 'checkbox' || e.target.tagName === 'SELECT') {
-            syncWithCloud(e.target);
-        }
-    });
+   // --- DELEGACIÓN DE PERSISTENCIA (UNIFICACIÓN) ---
+   /**
+    * TRACEABILIDAD: Se elimina la lógica local de guardado. 
+    * Ahora, academia.js confía plenamente en el puente de comunicación (postMessage) 
+    * establecido en app.js y gestionado por WorkbookCore.js.
+    * Esto evita la duplicidad de escrituras en Firestore y asegura que el 
+    * 'Filtro 4+1' tenga una sola fuente de verdad.
+    */
 
     // 2. ACTIVADOR DEL MÓDULO (CONSOLIDADO Y DINÁMICO)
     let startModule = async (courseId) => {
